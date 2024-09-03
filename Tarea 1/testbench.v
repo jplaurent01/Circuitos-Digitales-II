@@ -1,3 +1,6 @@
+`include "controlador.v"
+`include "tester.v"
+
 module controlador_estacionamiento_tb;
     wire clk;
     wire rst;
