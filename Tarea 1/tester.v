@@ -19,7 +19,7 @@
 
         // Secuencia de prueba
     initial begin
-
+        //Se inicializan las entradas del controlador
         rst = 1; sensor_vehicule = 0; sensor_moved_vehicule = 0; password_input = 0;
         #10 rst = 0;
 
