@@ -3,7 +3,7 @@
     output reg rst, //Senial de reinicio
     output reg sensor_vehicule, //Sensor de vehiculo
     output reg sensor_moved_vehicule, //Sensor de vehiculo desplazado
-    output wire [15:0] correct_password, //Contrasenia correcta
+    //output wire [15:0] correct_password, //Contrasenia correcta
     output reg [15:0] password_input, //Contrasenia de entrada
     input wire open_gate, // Salida compuerta abierta
     input wire close_gate, // Salida compuerta cerrada

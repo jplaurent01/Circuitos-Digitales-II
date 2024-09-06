@@ -3,7 +3,7 @@ module controlador_estacionamiento (
     input wire rst, //Senial de reinicio
     input wire sensor_vehicule, //Sensor de vehiculo
     input wire sensor_moved_vehicule, //Sensor de vehiculo desplazado
-    input wire [15:0] correct_password, //Contrasenia correcta
+    //input wire [15:0] correct_password, //Contrasenia correcta
     input wire [15:0] password_input, //Contrasenia de entrada
     output reg open_gate, // Salida compuerta abierta
     output reg close_gate, // Salida compuerta cerrada
@@ -20,7 +20,9 @@ module controlador_estacionamiento (
     parameter WRONG_KEY = 3'b101;//Clave erronea
     parameter BLOCKED = 3'b110;//Alarma bloqueo
 
-    reg [2:0] state, next_state;
+    //Contrasenia por defecto
+    parameter correct_password = 16'b0010_0100_0110_1000;//2468
+    reg [2:0] state, next_state; //registros del estado actual y siguiente estado
     reg [2:0] counter; // Contador para intentos fallidos
 
     //Transición de estados

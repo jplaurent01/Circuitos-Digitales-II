@@ -14,7 +14,7 @@ module controlador_estacionamiento_tb;
     wire alarm_blocked;
 
     //Clave correcta 3761
-    wire [15:0] correct_password = 16'b0011_0111_0110_0001;
+    //wire [15:0] correct_password = 16'b0011_0111_0110_0001;
     
     //Se crea un archivo resultados.vcd para abrir en gtkwave con las varibales del controlador de estacionamientos
     initial begin
@@ -22,14 +22,14 @@ module controlador_estacionamiento_tb;
         $dumpvars(-1, U0);
     end
 
-    // Instancia del modulo controlador
-    controlador_estacionamiento U0 (
+    // Instancia del modulo controlador, //Clave correcta 3761 16'b0011_0111_0110_0001
+    controlador_estacionamiento #(.correct_password(16'b0011_0111_0110_0001)) U0 (
         .clk(clk),
         .rst(rst),
         .sensor_vehicule(sensor_vehicule),
         .sensor_moved_vehicule(sensor_moved_vehicule),
         .password_input(password_input),
-        .correct_password(correct_password),
+        //.correct_password(correct_password),
         .open_gate(open_gate),
         .close_gate(close_gate),
         .alarm_wrong_pin(alarm_wrong_pin),
@@ -43,7 +43,7 @@ module controlador_estacionamiento_tb;
         .sensor_vehicule(sensor_vehicule),
         .sensor_moved_vehicule(sensor_moved_vehicule),
         .password_input(password_input),
-        .correct_password(correct_password),
+        //.correct_password(correct_password),
         .open_gate(open_gate),
         .close_gate(close_gate),
         .alarm_wrong_pin(alarm_wrong_pin),
