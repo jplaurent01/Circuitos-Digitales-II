@@ -1,4 +1,5 @@
 `include "controlador_synth.v"
+`include "cmos_cells.v"
 `include "tester.v"
 
 module controlador_estacionamiento_tb;

@@ -14,7 +14,7 @@ techmap; opt
 dfflibmap -liberty ./cmos_cells.lib
 
 # mapping logic to cmos_cells.lib
-#abc -liberty ./cmos_cells.lib
+abc -liberty ./cmos_cells.lib
 
 # Generate GraphViz output
 show
