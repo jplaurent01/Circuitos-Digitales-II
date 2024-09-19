@@ -27,7 +27,7 @@ module controlador_estacionamiento (
 
 
     //Transición de estados
-    always @(posedge clk or posedge rst) begin
+    always @(posedge clk) begin
         if (rst) begin //Caso inicial y de reinicio, se establecen condiciones iniciales
             state <= IDLE; //Se establce como estado inicial IDLE
         end else begin
@@ -83,7 +83,7 @@ module controlador_estacionamiento (
     end
 
     //Comportamiento salidas controlador, siempre que exista un cambio
-    always @(posedge clk or posedge rst) begin
+    always @(posedge clk) begin
         if (rst) begin
             open_gate <= 0;
             close_gate <= 0;

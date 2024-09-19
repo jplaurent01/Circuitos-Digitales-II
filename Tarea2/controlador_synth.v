@@ -71,22 +71,38 @@ module controlador_estacionamiento(clk, rst, sensor_vehicule, sensor_moved_vehic
   wire _060_;
   wire _061_;
   wire _062_;
+  wire _063_;
+  wire _064_;
+  wire _065_;
+  wire _066_;
+  wire _067_;
+  wire _068_;
+  wire _069_;
+  wire _070_;
+  wire _071_;
+  wire _072_;
+  wire _073_;
+  wire _074_;
+  wire _075_;
+  wire _076_;
+  wire _077_;
+  wire _078_;
+  wire _079_;
+  wire _080_;
+  wire _081_;
+  wire _082_;
   (* src = "controlador.v:11" *)
   output alarm_blocked;
-  reg alarm_blocked;
   (* src = "controlador.v:10" *)
   output alarm_wrong_pin;
-  reg alarm_wrong_pin;
   (* src = "controlador.v:2" *)
   input clk;
   (* src = "controlador.v:9" *)
   output close_gate;
-  reg close_gate;
   (* src = "controlador.v:26" *)
-  reg [2:0] counter;
+  wire [2:0] counter;
   (* src = "controlador.v:8" *)
   output open_gate;
-  reg open_gate;
   (* src = "controlador.v:7" *)
   input [15:0] password_input;
   (* src = "controlador.v:3" *)
@@ -96,395 +112,490 @@ module controlador_estacionamiento(clk, rst, sensor_vehicule, sensor_moved_vehic
   (* src = "controlador.v:4" *)
   input sensor_vehicule;
   (* onehot = 32'd1 *)
-  reg [6:0] state;
-  NOT _063_ (
-    .A(state[1]),
-    .Y(_016_)
-  );
-  NOT _064_ (
-    .A(state[6]),
-    .Y(_017_)
-  );
-  NOT _065_ (
-    .A(state[3]),
-    .Y(_018_)
-  );
-  NOT _066_ (
-    .A(state[5]),
-    .Y(_019_)
-  );
-  NOT _067_ (
-    .A(counter[1]),
-    .Y(_020_)
-  );
-  NOT _068_ (
-    .A(counter[0]),
-    .Y(_021_)
-  );
-  NOT _069_ (
-    .A(sensor_moved_vehicule),
-    .Y(_022_)
-  );
-  NOT _070_ (
-    .A(sensor_vehicule),
-    .Y(_023_)
-  );
-  NOT _071_ (
-    .A(state[2]),
-    .Y(_024_)
-  );
-  NAND _072_ (
-    .A(state[6]),
-    .B(_022_),
-    .Y(_025_)
-  );
-  NOR _073_ (
-    .A(password_input[7]),
-    .B(password_input[11]),
-    .Y(_026_)
-  );
-  NOR _074_ (
-    .A(password_input[14]),
-    .B(password_input[15]),
-    .Y(_027_)
-  );
-  NAND _075_ (
-    .A(_026_),
-    .B(_027_),
-    .Y(_028_)
-  );
-  NOR _076_ (
-    .A(password_input[1]),
-    .B(password_input[2]),
-    .Y(_029_)
-  );
-  NOR _077_ (
-    .A(password_input[3]),
-    .B(password_input[4]),
-    .Y(_030_)
-  );
-  NAND _078_ (
-    .A(_029_),
-    .B(_030_),
-    .Y(_031_)
-  );
-  NOR _079_ (
-    .A(_028_),
-    .B(_031_),
-    .Y(_032_)
-  );
-  NOT _080_ (
-    .A(_032_),
-    .Y(_033_)
-  );
-  NAND _081_ (
-    .A(password_input[9]),
-    .B(password_input[10]),
-    .Y(_034_)
-  );
-  NAND _082_ (
-    .A(password_input[12]),
-    .B(password_input[13]),
+  wire [6:0] state;
+  NOT _083_ (
+    .A(rst),
     .Y(_035_)
   );
-  NOR _083_ (
-    .A(_034_),
-    .B(_035_),
+  NOT _084_ (
+    .A(state[5]),
     .Y(_036_)
   );
-  NAND _084_ (
-    .A(password_input[0]),
-    .B(password_input[5]),
+  NOT _085_ (
+    .A(sensor_moved_vehicule),
     .Y(_037_)
   );
-  NAND _085_ (
-    .A(password_input[6]),
-    .B(password_input[8]),
+  NOT _086_ (
+    .A(sensor_vehicule),
     .Y(_038_)
   );
-  NOR _086_ (
-    .A(_037_),
-    .B(_038_),
+  NOT _087_ (
+    .A(alarm_wrong_pin),
     .Y(_039_)
   );
-  NAND _087_ (
-    .A(_036_),
-    .B(_039_),
+  NOT _088_ (
+    .A(counter[0]),
     .Y(_040_)
   );
-  NOR _088_ (
-    .A(_033_),
-    .B(_040_),
+  NOT _089_ (
+    .A(counter[2]),
     .Y(_041_)
   );
-  NAND _089_ (
+  NOT _090_ (
     .A(state[2]),
-    .B(_041_),
     .Y(_042_)
   );
-  NAND _090_ (
-    .A(_025_),
-    .B(_042_),
-    .Y(_010_)
-  );
-  NAND _091_ (
-    .A(state[0]),
-    .B(sensor_vehicule),
+  NOT _091_ (
+    .A(state[4]),
     .Y(_043_)
   );
-  NOR _092_ (
-    .A(_020_),
-    .B(_021_),
+  NAND _092_ (
+    .A(_035_),
+    .B(state[6]),
     .Y(_044_)
   );
   NOR _093_ (
-    .A(counter[2]),
+    .A(sensor_moved_vehicule),
     .B(_044_),
     .Y(_045_)
   );
-  NAND _094_ (
-    .A(state[5]),
-    .B(_045_),
+  NOT _094_ (
+    .A(_045_),
     .Y(_046_)
   );
-  NAND _095_ (
-    .A(_043_),
-    .B(_046_),
-    .Y(_009_)
-  );
-  NAND _096_ (
-    .A(state[0]),
-    .B(_023_),
+  NOR _095_ (
+    .A(rst),
+    .B(_042_),
     .Y(_047_)
   );
-  NOR _097_ (
-    .A(state[1]),
-    .B(state[0]),
+  NAND _096_ (
+    .A(_035_),
+    .B(state[2]),
     .Y(_048_)
   );
-  NAND _098_ (
-    .A(_016_),
-    .B(_047_),
-    .Y(_007_)
-  );
-  NOR _099_ (
-    .A(_019_),
-    .B(_045_),
+  NOR _097_ (
+    .A(password_input[11]),
+    .B(password_input[14]),
     .Y(_049_)
   );
-  NOR _100_ (
-    .A(state[3]),
-    .B(_049_),
+  NOR _098_ (
+    .A(password_input[15]),
+    .B(password_input[1]),
     .Y(_050_)
   );
-  NOT _101_ (
-    .A(_050_),
-    .Y(_008_)
-  );
-  NOR _102_ (
-    .A(state[0]),
-    .B(state[5]),
+  NAND _099_ (
+    .A(_049_),
+    .B(_050_),
     .Y(_051_)
   );
-  NAND _103_ (
-    .A(counter[0]),
-    .B(_051_),
+  NOR _100_ (
+    .A(password_input[2]),
+    .B(password_input[3]),
     .Y(_052_)
   );
-  NAND _104_ (
-    .A(state[5]),
-    .B(_021_),
+  NOR _101_ (
+    .A(password_input[4]),
+    .B(password_input[7]),
     .Y(_053_)
   );
-  NAND _105_ (
+  NAND _102_ (
     .A(_052_),
     .B(_053_),
-    .Y(_003_[0])
-  );
-  NAND _106_ (
-    .A(_020_),
-    .B(_021_),
     .Y(_054_)
   );
-  NAND _107_ (
-    .A(counter[1]),
-    .B(_051_),
+  NOR _103_ (
+    .A(_051_),
+    .B(_054_),
     .Y(_055_)
   );
-  NOR _108_ (
-    .A(_019_),
-    .B(_044_),
+  NOT _104_ (
+    .A(_055_),
     .Y(_056_)
   );
-  NAND _109_ (
-    .A(_054_),
-    .B(_056_),
+  NAND _105_ (
+    .A(password_input[9]),
+    .B(password_input[10]),
     .Y(_057_)
   );
-  NAND _110_ (
-    .A(_055_),
-    .B(_057_),
-    .Y(_003_[1])
-  );
-  NAND _111_ (
-    .A(counter[2]),
-    .B(_051_),
+  NAND _106_ (
+    .A(password_input[12]),
+    .B(password_input[13]),
     .Y(_058_)
   );
-  NAND _112_ (
-    .A(counter[2]),
-    .B(_044_),
+  NOR _107_ (
+    .A(_057_),
+    .B(_058_),
     .Y(_059_)
   );
-  NAND _113_ (
-    .A(_049_),
-    .B(_059_),
+  NAND _108_ (
+    .A(password_input[0]),
+    .B(password_input[5]),
     .Y(_060_)
   );
-  NAND _114_ (
-    .A(_058_),
-    .B(_060_),
-    .Y(_003_[2])
-  );
-  NAND _115_ (
-    .A(open_gate),
-    .B(_048_),
+  NAND _109_ (
+    .A(password_input[6]),
+    .B(password_input[8]),
     .Y(_061_)
   );
-  NAND _116_ (
-    .A(_017_),
+  NOR _110_ (
+    .A(_060_),
     .B(_061_),
-    .Y(_004_)
-  );
-  NOR _117_ (
-    .A(state[0]),
-    .B(state[6]),
     .Y(_062_)
   );
-  NAND _118_ (
-    .A(alarm_blocked),
+  NAND _111_ (
+    .A(_059_),
     .B(_062_),
+    .Y(_063_)
+  );
+  NOR _112_ (
+    .A(_056_),
+    .B(_063_),
+    .Y(_064_)
+  );
+  NAND _113_ (
+    .A(_047_),
+    .B(_064_),
+    .Y(_065_)
+  );
+  NAND _114_ (
+    .A(_046_),
+    .B(_065_),
     .Y(_011_)
   );
+  NAND _115_ (
+    .A(state[0]),
+    .B(sensor_vehicule),
+    .Y(_066_)
+  );
+  NAND _116_ (
+    .A(counter[1]),
+    .B(counter[0]),
+    .Y(_067_)
+  );
+  NOT _117_ (
+    .A(_067_),
+    .Y(_068_)
+  );
+  NOR _118_ (
+    .A(counter[2]),
+    .B(_068_),
+    .Y(_069_)
+  );
   NAND _119_ (
-    .A(_018_),
-    .B(_011_),
-    .Y(_000_)
+    .A(_041_),
+    .B(_067_),
+    .Y(_070_)
   );
-  NOR _120_ (
+  NAND _120_ (
     .A(state[5]),
-    .B(_062_),
-    .Y(_012_)
+    .B(_069_),
+    .Y(_071_)
   );
-  NOR _121_ (
-    .A(alarm_wrong_pin),
-    .B(_049_),
-    .Y(_013_)
+  NAND _121_ (
+    .A(_066_),
+    .B(_071_),
+    .Y(_072_)
   );
-  NOR _122_ (
-    .A(_012_),
-    .B(_013_),
-    .Y(_001_)
+  NOT _122_ (
+    .A(_072_),
+    .Y(_073_)
   );
-  NAND _123_ (
-    .A(close_gate),
-    .B(_062_),
-    .Y(_014_)
+  NOR _123_ (
+    .A(rst),
+    .B(_073_),
+    .Y(_010_)
   );
-  NAND _124_ (
-    .A(_016_),
-    .B(_014_),
-    .Y(_002_)
+  NOR _124_ (
+    .A(_036_),
+    .B(_069_),
+    .Y(_074_)
   );
   NAND _125_ (
-    .A(state[6]),
-    .B(sensor_moved_vehicule),
-    .Y(_015_)
+    .A(state[5]),
+    .B(_070_),
+    .Y(_075_)
   );
-  NOT _126_ (
-    .A(_015_),
-    .Y(_005_)
+  NOR _126_ (
+    .A(state[3]),
+    .B(_074_),
+    .Y(_076_)
   );
   NOR _127_ (
-    .A(_024_),
-    .B(_041_),
+    .A(rst),
+    .B(_076_),
+    .Y(_009_)
+  );
+  NAND _128_ (
+    .A(state[0]),
+    .B(_038_),
+    .Y(_077_)
+  );
+  NOR _129_ (
+    .A(rst),
+    .B(state[1]),
+    .Y(_078_)
+  );
+  NAND _130_ (
+    .A(_077_),
+    .B(_078_),
+    .Y(_008_)
+  );
+  NOR _131_ (
+    .A(state[0]),
+    .B(state[5]),
+    .Y(_079_)
+  );
+  NOR _132_ (
+    .A(_040_),
+    .B(_079_),
+    .Y(_080_)
+  );
+  NAND _133_ (
+    .A(_036_),
+    .B(_040_),
+    .Y(_081_)
+  );
+  NAND _134_ (
+    .A(_035_),
+    .B(_081_),
+    .Y(_082_)
+  );
+  NOR _135_ (
+    .A(_080_),
+    .B(_082_),
+    .Y(_003_[0])
+  );
+  NAND _136_ (
+    .A(counter[1]),
+    .B(_079_),
+    .Y(_012_)
+  );
+  NAND _137_ (
+    .A(state[5]),
+    .B(_067_),
+    .Y(_013_)
+  );
+  NAND _138_ (
+    .A(_012_),
+    .B(_013_),
+    .Y(_014_)
+  );
+  NOR _139_ (
+    .A(counter[1]),
+    .B(counter[0]),
+    .Y(_015_)
+  );
+  NAND _140_ (
+    .A(_035_),
+    .B(_014_),
+    .Y(_016_)
+  );
+  NOR _141_ (
+    .A(_015_),
+    .B(_016_),
+    .Y(_003_[1])
+  );
+  NAND _142_ (
+    .A(counter[2]),
+    .B(_079_),
+    .Y(_017_)
+  );
+  NOT _143_ (
+    .A(_017_),
+    .Y(_018_)
+  );
+  NOR _144_ (
+    .A(_041_),
+    .B(_067_),
+    .Y(_019_)
+  );
+  NOR _145_ (
+    .A(_075_),
+    .B(_019_),
+    .Y(_020_)
+  );
+  NOR _146_ (
+    .A(_018_),
+    .B(_020_),
+    .Y(_021_)
+  );
+  NOR _147_ (
+    .A(rst),
+    .B(_021_),
+    .Y(_003_[2])
+  );
+  NOR _148_ (
+    .A(state[0]),
+    .B(state[6]),
+    .Y(_022_)
+  );
+  NAND _149_ (
+    .A(_078_),
+    .B(_022_),
+    .Y(_023_)
+  );
+  NOT _150_ (
+    .A(_023_),
+    .Y(_024_)
+  );
+  NAND _151_ (
+    .A(open_gate),
+    .B(_024_),
+    .Y(_025_)
+  );
+  NAND _152_ (
+    .A(_044_),
+    .B(_025_),
+    .Y(_004_)
+  );
+  NAND _153_ (
+    .A(alarm_blocked),
+    .B(_022_),
+    .Y(_026_)
+  );
+  NOT _154_ (
+    .A(_026_),
+    .Y(_027_)
+  );
+  NOR _155_ (
+    .A(state[3]),
+    .B(_027_),
+    .Y(_028_)
+  );
+  NOR _156_ (
+    .A(rst),
+    .B(_028_),
+    .Y(_000_)
+  );
+  NOR _157_ (
+    .A(state[5]),
+    .B(_022_),
+    .Y(_029_)
+  );
+  NOR _158_ (
+    .A(_039_),
+    .B(_029_),
+    .Y(_030_)
+  );
+  NOR _159_ (
+    .A(_074_),
+    .B(_030_),
+    .Y(_031_)
+  );
+  NOR _160_ (
+    .A(rst),
+    .B(_031_),
+    .Y(_001_)
+  );
+  NAND _161_ (
+    .A(close_gate),
+    .B(_022_),
+    .Y(_032_)
+  );
+  NOT _162_ (
+    .A(_032_),
+    .Y(_033_)
+  );
+  NOR _163_ (
+    .A(state[1]),
+    .B(_033_),
+    .Y(_034_)
+  );
+  NOR _164_ (
+    .A(rst),
+    .B(_034_),
+    .Y(_002_)
+  );
+  NOR _165_ (
+    .A(_037_),
+    .B(_044_),
+    .Y(_005_)
+  );
+  NOR _166_ (
+    .A(_048_),
+    .B(_064_),
+    .Y(_007_)
+  );
+  NOR _167_ (
+    .A(rst),
+    .B(_043_),
     .Y(_006_)
   );
-  always @(posedge clk or posedge rst)
-    if (rst)
-      state[0] <= 1;
-    else
-      state[0] <= _007_;
-  always @(posedge clk or posedge rst)
-    if (rst)
-      state[1] <= 0;
-    else
-      state[1] <= _005_;
-  always @(posedge clk or posedge rst)
-    if (rst)
-      state[2] <= 0;
-    else
-      state[2] <= state[4];
-  always @(posedge clk or posedge rst)
-    if (rst)
-      state[3] <= 0;
-    else
-      state[3] <= _008_;
-  always @(posedge clk or posedge rst)
-    if (rst)
-      state[4] <= 0;
-    else
-      state[4] <= _009_;
-  always @(posedge clk or posedge rst)
-    if (rst)
-      state[5] <= 0;
-    else
-      state[5] <= _006_;
-  always @(posedge clk or posedge rst)
-    if (rst)
-      state[6] <= 0;
-    else
-      state[6] <= _010_;
+  DFF _168_ (
+    .C(clk),
+    .D(_008_),
+    .Q(state[0])
+  );
+  DFF _169_ (
+    .C(clk),
+    .D(_005_),
+    .Q(state[1])
+  );
+  DFF _170_ (
+    .C(clk),
+    .D(_006_),
+    .Q(state[2])
+  );
+  DFF _171_ (
+    .C(clk),
+    .D(_009_),
+    .Q(state[3])
+  );
+  DFF _172_ (
+    .C(clk),
+    .D(_010_),
+    .Q(state[4])
+  );
+  DFF _173_ (
+    .C(clk),
+    .D(_007_),
+    .Q(state[5])
+  );
+  DFF _174_ (
+    .C(clk),
+    .D(_011_),
+    .Q(state[6])
+  );
   (* src = "controlador.v:86" *)
-  always @(posedge clk or posedge rst)
-    if (rst)
-      close_gate <= 0;
-    else
-      close_gate <= _002_;
+  DFF _175_ (
+    .C(clk),
+    .D(_002_),
+    .Q(close_gate)
+  );
   (* src = "controlador.v:86" *)
-  always @(posedge clk or posedge rst)
-    if (rst)
-      alarm_wrong_pin <= 0;
-    else
-      alarm_wrong_pin <= _001_;
+  DFF _176_ (
+    .C(clk),
+    .D(_001_),
+    .Q(alarm_wrong_pin)
+  );
   (* src = "controlador.v:86" *)
-  always @(posedge clk or posedge rst)
-    if (rst)
-      alarm_blocked <= 0;
-    else
-      alarm_blocked <= _000_;
+  DFF _177_ (
+    .C(clk),
+    .D(_000_),
+    .Q(alarm_blocked)
+  );
   (* src = "controlador.v:86" *)
-  always @(posedge clk or posedge rst)
-    if (rst)
-      open_gate <= 0;
-    else
-      open_gate <= _004_;
+  DFF _178_ (
+    .C(clk),
+    .D(_004_),
+    .Q(open_gate)
+  );
   (* src = "controlador.v:86" *)
-  always @(posedge clk or posedge rst)
-    if (rst)
-      counter[0] <= 0;
-    else
-      counter[0] <= _003_[0];
+  DFF _179_ (
+    .C(clk),
+    .D(_003_[0]),
+    .Q(counter[0])
+  );
   (* src = "controlador.v:86" *)
-  always @(posedge clk or posedge rst)
-    if (rst)
-      counter[1] <= 0;
-    else
-      counter[1] <= _003_[1];
+  DFF _180_ (
+    .C(clk),
+    .D(_003_[1]),
+    .Q(counter[1])
+  );
   (* src = "controlador.v:86" *)
-  always @(posedge clk or posedge rst)
-    if (rst)
-      counter[2] <= 0;
-    else
-      counter[2] <= _003_[2];
+  DFF _181_ (
+    .C(clk),
+    .D(_003_[2]),
+    .Q(counter[2])
+  );
 endmodule
