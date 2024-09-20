@@ -1,6 +1,6 @@
 `include "controlador_synth.v"
-`include "cmos_cells.v"
-`include "tester_sin_retardos.v"
+`include "cmos_cells_con_retardos.v"
+`include "tester.v"
 
 module controlador_estacionamiento_tb;
 //Seniales para conectar el tester con el device under teste
@@ -19,7 +19,7 @@ module controlador_estacionamiento_tb;
     
     //Se crea un archivo resultados.vcd para abrir en gtkwave con las varibales del controlador de estacionamientos
     initial begin
-        $dumpfile("resultados.vcd");
+        $dumpfile("resultados_retardos.vcd");
         $dumpvars(-1, U0);
     end
 

@@ -1,5 +1,4 @@
-`include "controlador_synth.v"
-`include "cmos_cells.v"
+`include "controlador_RTLIL.v"
 `include "tester_sin_retardos.v"
 
 module controlador_estacionamiento_tb;
@@ -19,7 +18,7 @@ module controlador_estacionamiento_tb;
     
     //Se crea un archivo resultados.vcd para abrir en gtkwave con las varibales del controlador de estacionamientos
     initial begin
-        $dumpfile("resultados.vcd");
+        $dumpfile("resultados_RTLIL.vcd");
         $dumpvars(-1, U0);
     end
 
