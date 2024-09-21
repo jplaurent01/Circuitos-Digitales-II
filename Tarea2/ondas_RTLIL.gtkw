@@ -1,20 +1,20 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Fri Sep 20 17:59:53 2024
+[*] Sat Sep 21 22:47:10 2024
 [*]
-[dumpfile] "/home/jose/Desktop/Digitales2/Circuitos-Digitales-II/Tarea2/resultados.vcd"
-[dumpfile_mtime] "Fri Sep 20 17:54:43 2024"
+[dumpfile] "/home/jose/Desktop/Digitales2/Circuitos-Digitales-II/Tarea2/resultados_RTLIL.vcd"
+[dumpfile_mtime] "Sat Sep 21 22:43:48 2024"
 [dumpfile_size] 6702
 [savefile] "/home/jose/Desktop/Digitales2/Circuitos-Digitales-II/Tarea2/ondas_RTLIL.gtkw"
 [timestart] 0
-[size] 1000 600
-[pos] 194 0
-*-7.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[size] 1296 601
+[pos] -51 -1
+*-7.315623 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] controlador_estacionamiento_tb.
 [sst_width] 233
-[signals_width] 206
+[signals_width] 198
 [sst_expanded] 1
-[sst_vpaned_height] 153
+[sst_vpaned_height] 144
 @28
 controlador_estacionamiento_tb.U0.clk
 @22
@@ -25,10 +25,9 @@ controlador_estacionamiento_tb.U0.sensor_vehicule
 controlador_estacionamiento_tb.U0.open_gate
 controlador_estacionamiento_tb.U0.sensor_moved_vehicule
 controlador_estacionamiento_tb.U0.close_gate
-@29
 controlador_estacionamiento_tb.U0.rst
-@28
 controlador_estacionamiento_tb.U0.alarm_blocked
+@29
 controlador_estacionamiento_tb.U0.alarm_wrong_pin
 [pattern_trace] 1
 [pattern_trace] 0
