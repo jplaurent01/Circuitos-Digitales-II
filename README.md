@@ -1,2 +1,2 @@
 # Circuitos-Digitales-II
-Curso de circuitos digitales 2 desarrollado en Verilog
+El presente repositorio pretende resolver distintos problemas utilizando las herramientas de Verilog y SystemVerilog.

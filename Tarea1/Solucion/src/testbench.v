@@ -1,4 +1,4 @@
-`include "controlador.v"
+`include ".\src\controlador.v"
 `include "tester.v"
 
 module controlador_estacionamiento_tb;
