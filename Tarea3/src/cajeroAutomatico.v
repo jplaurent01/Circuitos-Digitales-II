@@ -20,16 +20,16 @@ module cajero_automatico (
 );
 
     //Definicion de los estados del cajero automatico
-    parameter IDLE = 0;//Estado inicial
-    parameter ESPERA_TARJETA = 1;//Espera de tarjeta
-    parameter LEER_PIN = 2; //Lectura de pin
-    parameter VERIFICAR_PIN = 3;//Verificacion pin
-    parameter SELECCIONAR_TRANSACCION = 4;//Seleciono tipo transacion
-    parameter PROCESAR_DEPOSITO = 5;//Proceso un deposito
-    parameter PROCESAR_RETIRO = 6;//Proceso un retiro
-    parameter JUMP_IDLE = 7;
-    parameter WRONG_PIN  = 8;//Pin incorrecto
-    parameter BLOCKED = 9;//Bloqueo sistema cuando e cuando el usuario ha introducido el pin de forma incorrecta 3 veces
+    parameter IDLE = 4'b0000;                 // Estado inicial
+    parameter ESPERA_TARJETA = 4'b0001;       // Espera de tarjeta
+    parameter LEER_PIN = 4'b0010;             // Lectura de pin
+    parameter VERIFICAR_PIN = 4'b0011;        // Verificacion del pin
+    parameter SELECCIONAR_TRANSACCION = 4'b0100; // Seleccion de tipo de transaccion
+    parameter PROCESAR_OPERACION = 4'b0101;
+    //parameter PROCESAR_DEPOSITO = 4'b0101;    // Procesamiento de deposito
+    //parameter PROCESAR_RETIRO = 4'b0110;      // Procesamiento de retiro
+    parameter WRONG_PIN = 4'b0110;            // Pin incorrecto
+    parameter BLOCKED = 4'b0111;              // Bloqueo del sistema
 
     //Contrasenia por defecto
     //parameter correct_password = 16'b0011_0111_0110_0001;// contrasenia correcta 3761
@@ -84,22 +84,30 @@ module cajero_automatico (
             end
             
             SELECCIONAR_TRANSACCION: begin //Caso donde verifico el tipo de transacion
-                if (TIPO_TRANS == 0) begin //Realizo un deposito
+            /*
+                if (TIPO_TRANS == 1'b0) begin //Realizo un deposito
                     next_state = PROCESAR_DEPOSITO; 
-                end else if (TIPO_TRANS == 1) begin
+                end else if (TIPO_TRANS == 1'b1) begin
                     next_state = PROCESAR_RETIRO;//Realizo un retiro
                 end else begin
                     next_state = IDLE; //No realizo deposito ni retiro
                 end
+            */
+            next_state = PROCESAR_OPERACION;
             end
 
-            PROCESAR_DEPOSITO: begin
-                next_state = JUMP_IDLE;
+            PROCESAR_OPERACION: begin
+                next_state = IDLE;
+            end
+            /*
+             PROCESAR_DEPOSITO: begin
+                next_state = IDLE;
             end
             
             PROCESAR_RETIRO : begin
-                next_state = JUMP_IDLE;
+                next_state = IDLE;
             end
+            */
 
             WRONG_PIN: begin //Caso de clave erronea
                 if (intentos > 2) begin // Si el contador de intentos es mayor igual a  3
@@ -113,10 +121,10 @@ module cajero_automatico (
                 //Permanezco bloqueado hasta reiniciar sistema
             end
 
-            JUMP_IDLE:
-             begin
-                next_state = IDLE;
-             end
+            //JUMP_IDLE:
+             //begin
+               // next_state = IDLE;
+             //end
             
         endcase
     end
@@ -175,8 +183,27 @@ module cajero_automatico (
                 SELECCIONAR_TRANSACCION: begin 
                     //Verifico tipo de transacion
                 end
+
+                PROCESAR_OPERACION: begin
+
+                    if (MONTO_STB && TIPO_TRANS == 1'b0) begin
+                        BALANCE <= BALANCE_INICIAL + MONTO;
+                        BALANCE_ACTUALIZADO <= 1;
+
+                    end if (MONTO_STB && TIPO_TRANS == 1'b1) begin
+
+                        if (MONTO <= BALANCE_INICIAL) begin
+                            BALANCE <= BALANCE_INICIAL - MONTO;
+                            BALANCE_ACTUALIZADO <= 1;
+                            ENTREGAR_DINERO <= 1;
+
+                        end else begin
+                            FONDOS_INSUFICIENTES <= 1;
+                        end
+                    end
+                end
                 
-                PROCESAR_DEPOSITO: begin
+                /*PROCESAR_DEPOSITO: begin
                     if (MONTO_STB) begin
                         BALANCE <= BALANCE_INICIAL + MONTO;
                         BALANCE_ACTUALIZADO <= 1;
@@ -194,6 +221,7 @@ module cajero_automatico (
                         end
                     end
                 end
+                */
 
                 WRONG_PIN:begin
                     PIN_INCORRECTO <= 1;
@@ -205,9 +233,9 @@ module cajero_automatico (
                     end
                 end
 
-                JUMP_IDLE: begin
-                
-                end
+                //JUMP_IDLE: begin
+                //
+                //end
                 
             endcase
         end

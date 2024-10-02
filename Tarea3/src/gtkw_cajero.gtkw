@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.71 (w)1999-2016 BSI
-[*] Tue Oct 01 18:43:47 2024
+[*] Wed Oct 02 03:08:06 2024
 [*]
 [dumpfile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea3\src\resultados_cajero_automatico.vcd"
-[dumpfile_mtime] "Tue Oct 01 18:42:51 2024"
-[dumpfile_size] 4313
+[dumpfile_mtime] "Wed Oct 02 03:02:10 2024"
+[dumpfile_size] 4307
 [savefile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea3\src\gtkw_cajero.gtkw"
-[timestart] 61
+[timestart] 106
 [size] 1366 705
 [pos] -1 -1
-*-5.053782 155 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-5.053782 175 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] cajero_automatico_tb.
 [sst_width] 197
 [signals_width] 198
