@@ -84,6 +84,31 @@ module tester(
         #50;
         //**************************************Fin caso #2********************************************************
 
+        //**************************************Caso #3********************************************************
+        //Se ingresa un BALANCE_INICIAL de 0, se ingresa el pin 3761, se ingresan los digitos
+        //3,7,6,1, se realiza un retiro MONTO = 2000, por lo que FONDOS_INSUFICIENTES = 1.
+        #10 BALANCE_INICIAL = 64'd00000; // Balance inicial: 10,000
+        // Simulación de insertar tarjeta
+        #10 TARJETA_RECIBIDA = 1;
+        // Simulación de ingreso de PIN correcto
+        #20 DIGITO = 4'd3; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd7; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd6; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd1; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        // Espera para verificar el PIN
+        #5;
+        // Simulación de seleccionar retiro (TIPO_TRANS = 1) y monto
+        #10 TIPO_TRANS = 1; MONTO = 32'd2000; MONTO_STB = 1; //Monto 2000
+        #20 MONTO_STB = 0; //Se duplica el tiempo de esta senial
+        // Espera para procesar el retiro
+        #50;
+        //**************************************Fin caso #3********************************************************
+
+        //**************************************Caso #4********************************************************
         // Simulación de insertar un PIN incorrecto
         #100 rst = 1; #10 rst = 0; // Resetear para la siguiente prueba
         #20 TARJETA_RECIBIDA = 1;
@@ -107,9 +132,22 @@ module tester(
         #10 DIGITO_STB = 0;
         #20 DIGITO = 4'd2; DIGITO_STB = 1;
         #10 DIGITO_STB = 0;
-        
+        #20 DIGITO = 4'd2; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
         // Verificar que el sistema se bloquee después del tercer intento
         #50;
+        #20 DIGITO = 4'd3; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd3; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd3; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd3; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        //**************************************Fin caso #4********************************************************
+        #50 TIPO_TRANS = 0;
+        #50 rst = 1;
+        #10 rst = 0;
 
         // Fin de la simulación
         #500 $finish;

@@ -25,9 +25,7 @@ module cajero_automatico (
     parameter LEER_PIN = 4'b0010;             // Lectura de pin
     parameter VERIFICAR_PIN = 4'b0011;        // Verificacion del pin
     parameter SELECCIONAR_TRANSACCION = 4'b0100; // Seleccion de tipo de transaccion
-    parameter PROCESAR_OPERACION = 4'b0101;
-    //parameter PROCESAR_DEPOSITO = 4'b0101;    // Procesamiento de deposito
-    //parameter PROCESAR_RETIRO = 4'b0110;      // Procesamiento de retiro
+    parameter PROCESAR_OPERACION = 4'b0101;//Procesamiento desposito o retiro
     parameter WRONG_PIN = 4'b0110;            // Pin incorrecto
     parameter BLOCKED = 4'b0111;              // Bloqueo del sistema
 
@@ -84,47 +82,24 @@ module cajero_automatico (
             end
             
             SELECCIONAR_TRANSACCION: begin //Caso donde verifico el tipo de transacion
-            /*
-                if (TIPO_TRANS == 1'b0) begin //Realizo un deposito
-                    next_state = PROCESAR_DEPOSITO; 
-                end else if (TIPO_TRANS == 1'b1) begin
-                    next_state = PROCESAR_RETIRO;//Realizo un retiro
-                end else begin
-                    next_state = IDLE; //No realizo deposito ni retiro
-                end
-            */
-            next_state = PROCESAR_OPERACION;
+                next_state = PROCESAR_OPERACION;
             end
 
             PROCESAR_OPERACION: begin
                 next_state = IDLE;
             end
-            /*
-             PROCESAR_DEPOSITO: begin
-                next_state = IDLE;
-            end
-            
-            PROCESAR_RETIRO : begin
-                next_state = IDLE;
-            end
-            */
 
             WRONG_PIN: begin //Caso de clave erronea
                 if (intentos > 2) begin // Si el contador de intentos es mayor igual a  3
                     next_state = BLOCKED; //Activo alarma de bloqueo
                 end else begin //Caso contrario pido que se ingrese contrasenia correcta
-                    next_state = VERIFICAR_PIN;
+                    next_state = LEER_PIN;
                 end
             end
 
             BLOCKED: begin
                 //Permanezco bloqueado hasta reiniciar sistema
             end
-
-            //JUMP_IDLE:
-             //begin
-               // next_state = IDLE;
-             //end
             
         endcase
     end
@@ -173,11 +148,7 @@ module cajero_automatico (
                 end
                 
                 VERIFICAR_PIN: begin
-                    //Cada vez que el usuario presiona un dígito,
-                    //la señal DIGITO_STB se pone en 1 durante un ciclo de 
-                    //reloj y se actualiza el valor de la entrada DIGITO.
-                    //Una vez introducidos los 4 dígitos del número de PIN, el resultado se compara con
-                    // el de la entrada PIN.
+                    //Verifico pin
                 end
                 
                 SELECCIONAR_TRANSACCION: begin 
@@ -203,26 +174,6 @@ module cajero_automatico (
                     end
                 end
                 
-                /*PROCESAR_DEPOSITO: begin
-                    if (MONTO_STB) begin
-                        BALANCE <= BALANCE_INICIAL + MONTO;
-                        BALANCE_ACTUALIZADO <= 1;
-                    end
-                end
-
-                PROCESAR_RETIRO: begin
-                    if (MONTO_STB) begin
-                        if (MONTO <= BALANCE_INICIAL) begin
-                            BALANCE <= BALANCE_INICIAL - MONTO;
-                            BALANCE_ACTUALIZADO <= 1;
-                            ENTREGAR_DINERO <= 1;
-                        end else begin
-                            FONDOS_INSUFICIENTES <= 1;
-                        end
-                    end
-                end
-                */
-
                 WRONG_PIN:begin
                     PIN_INCORRECTO <= 1;
                     intentos <= intentos + 1;
@@ -232,10 +183,6 @@ module cajero_automatico (
                         BLOQUEO <=1;
                     end
                 end
-
-                //JUMP_IDLE: begin
-                //
-                //end
                 
             endcase
         end

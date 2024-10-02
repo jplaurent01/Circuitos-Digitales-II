@@ -1,11 +1,11 @@
 [*]
 [*] GTKWave Analyzer v3.3.71 (w)1999-2016 BSI
-[*] Wed Oct 02 03:08:06 2024
+[*] Wed Oct 02 19:39:38 2024
 [*]
-[dumpfile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea3\src\resultados_cajero_automatico.vcd"
-[dumpfile_mtime] "Wed Oct 02 03:02:10 2024"
-[dumpfile_size] 4307
-[savefile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea3\src\gtkw_cajero.gtkw"
+[dumpfile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\tarea3\src\resultados_cajero_automatico.vcd"
+[dumpfile_mtime] "Wed Oct 02 19:38:52 2024"
+[dumpfile_size] 5812
+[savefile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\tarea3\src\gtkw_cajero.gtkw"
 [timestart] 106
 [size] 1366 705
 [pos] -1 -1
@@ -43,7 +43,8 @@ cajero_automatico_tb.U0.BLOQUEO
 cajero_automatico_tb.U0.pin_tecleado[15:0]
 @28
 cajero_automatico_tb.U0.next_state[2:0]
-@29
 cajero_automatico_tb.U0.state[2:0]
+@29
+cajero_automatico_tb.U0.intentos[1:0]
 [pattern_trace] 1
 [pattern_trace] 0
