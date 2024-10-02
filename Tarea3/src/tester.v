@@ -55,7 +55,7 @@ module tester(
         #5;
         // Simulación de seleccionar deposito (TIPO_TRANS = 0) y monto
         #10 TIPO_TRANS = 0; MONTO = 32'd2000; MONTO_STB = 1; //Monto 2000
-        #20 MONTO_STB = 0; //Se duplica el tiempo de esta senial
+        #15 MONTO_STB = 0; //Se duplica el tiempo de esta senial
         // Espera para procesar el deposito
         #50;
         //**************************************Fin caso #1********************************************************
@@ -79,7 +79,7 @@ module tester(
         #5;
         // Simulación de seleccionar retiro (TIPO_TRANS = 1) y monto
         #10 TIPO_TRANS = 1; MONTO = 32'd2000; MONTO_STB = 1; //Monto 2000
-        #20 MONTO_STB = 0; //Se duplica el tiempo de esta senial
+        #15 MONTO_STB = 0; //Se duplica el tiempo de esta senial
         // Espera para procesar el retiro
         #50;
         //**************************************Fin caso #2********************************************************
@@ -103,7 +103,7 @@ module tester(
         #5;
         // Simulación de seleccionar retiro (TIPO_TRANS = 1) y monto
         #10 TIPO_TRANS = 1; MONTO = 32'd2000; MONTO_STB = 1; //Monto 2000
-        #20 MONTO_STB = 0; //Se duplica el tiempo de esta senial
+        #15 MONTO_STB = 0; //Se duplica el tiempo de esta senial
         // Espera para procesar el retiro
         #50;
         //**************************************Fin caso #3********************************************************
