@@ -1,5 +1,5 @@
 `include "cmos_cells.v"
-`include "cajeroAutomatico.v"
+`include "cajeroAutomatico_synth.v"
 `include "tester.v"
 
 module cajero_automatico_tb;

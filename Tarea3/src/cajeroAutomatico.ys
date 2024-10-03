@@ -23,4 +23,4 @@ show
 clean
 
 # write synthesized design
-write_verilog controlador_synth.v
+write_verilog cajeroAutomatico_synth.v
