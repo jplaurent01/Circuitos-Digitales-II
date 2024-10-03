@@ -27,7 +27,6 @@ module cajero_automatico (
     parameter SELECCIONAR_TRANSACCION = 4'b0100; // Seleccion de tipo de transaccion
     parameter PROCESAR_OPERACION = 4'b0101;   // Procesamiento desposito o retiro
     parameter WRONG_PIN = 4'b0110;            // Pin incorrecto
-    parameter BLOCKED = 4'b0111;              // Bloqueo del sistema
 
     //Variales internas
     reg [2:0] state, next_state; //registros del estado actual y siguiente estado
@@ -89,15 +88,7 @@ module cajero_automatico (
             end
 
             WRONG_PIN: begin // Caso de Pin erroneo
-                if (intentos > 2) begin // Si el contador de intentos es mayor 2
-                    next_state = BLOCKED; // Activo alarma de bloqueo
-                end else begin // Vuelvo a leer los digitos 
-                    next_state = LEER_PIN;
-                end
-            end
-
-            BLOCKED: begin
-                //Permanezco bloqueado hasta reiniciar sistema
+                next_state = LEER_PIN; //Continuo leyendo un pin
             end
             
         endcase

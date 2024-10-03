@@ -1,0 +1,46 @@
+[*]
+[*] GTKWave Analyzer v3.3.71 (w)1999-2016 BSI
+[*] Thu Oct 03 15:58:45 2024
+[*]
+[dumpfile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea3\src\resultados_cajero_automatico.vcd"
+[dumpfile_mtime] "Thu Oct 03 15:57:18 2024"
+[dumpfile_size] 114468
+[savefile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea3\src\gtkw_cajero_Sintetizado.gtkw"
+[timestart] 0
+[size] 1366 705
+[pos] -1 -1
+*-8.622506 1666 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] cajero_automatico_tb.
+[sst_width] 197
+[signals_width] 198
+[sst_expanded] 1
+[sst_vpaned_height] 190
+@28
+cajero_automatico_tb.U0.clk
+cajero_automatico_tb.U0.rst
+cajero_automatico_tb.U0.TARJETA_RECIBIDA
+@22
+cajero_automatico_tb.U0.PIN[15:0]
+cajero_automatico_tb.U0.DIGITO[3:0]
+@28
+cajero_automatico_tb.U0.DIGITO_STB
+cajero_automatico_tb.U0.TIPO_TRANS
+@22
+cajero_automatico_tb.U0.MONTO[31:0]
+@28
+cajero_automatico_tb.U0.MONTO_STB
+@22
+cajero_automatico_tb.U0.BALANCE_INICIAL[63:0]
+@28
+cajero_automatico_tb.U0.BALANCE_ACTUALIZADO
+cajero_automatico_tb.U0.ENTREGAR_DINERO
+cajero_automatico_tb.U0.FONDOS_INSUFICIENTES
+cajero_automatico_tb.U0.PIN_INCORRECTO
+cajero_automatico_tb.U0.ADVERTENCIA
+cajero_automatico_tb.U0.BLOQUEO
+@22
+cajero_automatico_tb.U0.pin_tecleado[15:0]
+@29
+cajero_automatico_tb.U0.intentos[1:0]
+[pattern_trace] 1
+[pattern_trace] 0
