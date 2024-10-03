@@ -36,7 +36,7 @@ module tester(
         BALANCE_INICIAL = 64'd10000; // Balance inicial: 10,000
         #10 rst = 0;
 
-        /*************************************** Caso #1 ********************************************************
+        /*************************************** prueba #1 ********************************************************
         Se ingresa un BALANCE_INICIAL de 10 000, se ingresa el pin 3761, se ingresan los digitos
         3,7,6,1, se realiza un deposito MONTO = 2000, por lo que BALANCE = 12 000 y se espera poner en 1 las
         senial BALANCE_ACTUALIZADO = 1. */
@@ -59,9 +59,9 @@ module tester(
         #15 MONTO_STB = 0; //Se duplica el tiempo de esta senial
         // Espera para procesar el deposito
         #50;
-        //************************************** Fin caso #1 ********************************************************
+        //************************************** Fin prueba #1 ********************************************************
 
-        /************************************** Caso #2 ********************************************************
+        /************************************** prueba #2 ********************************************************
         Se ingresa un BALANCE_INICIAL de 10 000, se ingresa el pin 3761, se ingresan los digitos
         3,7,6,1, se realiza un retiro MONTO = 2000, por lo que BALANCE = 8000 y se espera poner en 1 las
         senial BALANCE_ACTUALIZADO = 1 y  ENTREGAR_DINERO = 1. */
@@ -84,10 +84,10 @@ module tester(
         #15 MONTO_STB = 0; //Se duplica el tiempo de esta senial
         // Espera para procesar el retiro
         #50;
-        //************************************** Fin caso #2 ********************************************************
+        //************************************** Fin prueba #2 ********************************************************
 
         
-        /*************************************** Caso #3 ********************************************************
+        /*************************************** prueba #3 ********************************************************
         Se ingresa un BALANCE_INICIAL de 0, se ingresa el pin 3761, se ingresan los digitos
         3,7,6,1, se realiza un retiro MONTO = 2000, por lo que FONDOS_INSUFICIENTES = 1.*/
 
@@ -110,10 +110,10 @@ module tester(
         #15 MONTO_STB = 0; //Se duplica el tiempo de esta senial
         // Espera para procesar el retiro
         #50;
-        //************************************** Fin caso #3 ********************************************************
+        //************************************** Fin prueba #3 ********************************************************
 
-        /************************************** Caso #4 ********************************************************
-        En este caso se ingresan tres veces pines erroneos para activar señales de PIN_INCORRECTO, ADVERTENCIA y BLOQUEO.*/
+        /************************************** prueba #4 ********************************************************
+        En este prueba se ingresan tres veces pines erroneos para activar señales de PIN_INCORRECTO, ADVERTENCIA y BLOQUEO.*/
 
         //Pin incorrecto #1
         #100 rst = 1; #10 rst = 0; // Resetear para la siguiente prueba
@@ -150,10 +150,10 @@ module tester(
         #10 DIGITO_STB = 0;
         #20 DIGITO = 4'd3; DIGITO_STB = 1;
         #10 DIGITO_STB = 0;
-        //************************************** Fin caso #4 ********************************************************
+        //************************************** Fin prueba #4 ********************************************************
         
-        /************************************** Caso #5 ********************************************************
-        En este caso se activa la señal de RESET para desactivar el estado de bloqueo y reiniciar el cajero
+        /************************************** prueba #5 ********************************************************
+        En este prueba se activa la señal de RESET para desactivar el estado de bloqueo y reiniciar el cajero
         Luego se realiza un intento incorrecto del pin y luego otro intento correcto del pin para realizar un retiro*/
         #50 rst = 1;
         #10 rst = 0;
