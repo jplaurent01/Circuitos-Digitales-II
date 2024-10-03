@@ -10,9 +10,6 @@ proc; opt; fsm; opt; memory; opt
 # mapping to internal cell library
 techmap; opt
 
-# write synthesized design
-write_verilog controlador_RTLIL.v
-
 # mapping flip-flops to cmos_cells.lib
 dfflibmap -liberty ./cmos_cells.lib
 

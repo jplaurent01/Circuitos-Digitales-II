@@ -36,10 +36,11 @@ module tester(
         BALANCE_INICIAL = 64'd10000; // Balance inicial: 10,000
         #10 rst = 0;
 
-        //**************************************Caso #1********************************************************
-        //Se ingresa un BALANCE_INICIAL de 10 000, se ingresa el pin 3761, se ingresan los digitos
-        //3,7,6,1, se realiza un deposito MONTO = 2000, por lo que BALANCE = 12 000 y se espera poner en 1 las
-        //senial BALANCE_ACTUALIZADO = 1.
+        /*************************************** Caso #1 ********************************************************
+        Se ingresa un BALANCE_INICIAL de 10 000, se ingresa el pin 3761, se ingresan los digitos
+        3,7,6,1, se realiza un deposito MONTO = 2000, por lo que BALANCE = 12 000 y se espera poner en 1 las
+        senial BALANCE_ACTUALIZADO = 1. */
+
         // Simulación de insertar tarjeta
         #10 TARJETA_RECIBIDA = 1;
         // Simulación de ingreso de PIN correcto
@@ -58,12 +59,13 @@ module tester(
         #15 MONTO_STB = 0; //Se duplica el tiempo de esta senial
         // Espera para procesar el deposito
         #50;
-        //**************************************Fin caso #1********************************************************
+        //************************************** Fin caso #1 ********************************************************
 
-        //**************************************Caso #2********************************************************
-        //Se ingresa un BALANCE_INICIAL de 10 000, se ingresa el pin 3761, se ingresan los digitos
-        //3,7,6,1, se realiza un retiro MONTO = 2000, por lo que BALANCE = 8000 y se espera poner en 1 las
-        //senial BALANCE_ACTUALIZADO = 1 y  ENTREGAR_DINERO = 1.
+        /************************************** Caso #2 ********************************************************
+        Se ingresa un BALANCE_INICIAL de 10 000, se ingresa el pin 3761, se ingresan los digitos
+        3,7,6,1, se realiza un retiro MONTO = 2000, por lo que BALANCE = 8000 y se espera poner en 1 las
+        senial BALANCE_ACTUALIZADO = 1 y  ENTREGAR_DINERO = 1. */
+
         // Simulación de insertar tarjeta
         #10 TARJETA_RECIBIDA = 1;
         // Simulación de ingreso de PIN correcto
@@ -82,11 +84,13 @@ module tester(
         #15 MONTO_STB = 0; //Se duplica el tiempo de esta senial
         // Espera para procesar el retiro
         #50;
-        //**************************************Fin caso #2********************************************************
+        //************************************** Fin caso #2 ********************************************************
 
-        //**************************************Caso #3********************************************************
-        //Se ingresa un BALANCE_INICIAL de 0, se ingresa el pin 3761, se ingresan los digitos
-        //3,7,6,1, se realiza un retiro MONTO = 2000, por lo que FONDOS_INSUFICIENTES = 1.
+        
+        /*************************************** Caso #3 ********************************************************
+        Se ingresa un BALANCE_INICIAL de 0, se ingresa el pin 3761, se ingresan los digitos
+        3,7,6,1, se realiza un retiro MONTO = 2000, por lo que FONDOS_INSUFICIENTES = 1.*/
+
         #10 BALANCE_INICIAL = 64'd00000; // Balance inicial: 10,000
         // Simulación de insertar tarjeta
         #10 TARJETA_RECIBIDA = 1;
@@ -106,10 +110,12 @@ module tester(
         #15 MONTO_STB = 0; //Se duplica el tiempo de esta senial
         // Espera para procesar el retiro
         #50;
-        //**************************************Fin caso #3********************************************************
+        //************************************** Fin caso #3 ********************************************************
 
-        //**************************************Caso #4********************************************************
-        // Simulación de insertar un PIN incorrecto
+        /************************************** Caso #4 ********************************************************
+        En este caso se ingresan tres veces pines erroneos para activar señales de PIN_INCORRECTO, ADVERTENCIA y BLOQUEO.*/
+
+        //Pin incorrecto #1
         #100 rst = 1; #10 rst = 0; // Resetear para la siguiente prueba
         #20 TARJETA_RECIBIDA = 1;
         #20 DIGITO = 4'd1; DIGITO_STB = 1;
@@ -144,13 +150,48 @@ module tester(
         #10 DIGITO_STB = 0;
         #20 DIGITO = 4'd3; DIGITO_STB = 1;
         #10 DIGITO_STB = 0;
-        //**************************************Fin caso #4********************************************************
-        #50 TIPO_TRANS = 0;
+        //************************************** Fin caso #4 ********************************************************
+        
+        /************************************** Caso #5 ********************************************************
+        En este caso se activa la señal de RESET para desactivar el estado de bloqueo y reiniciar el cajero
+        Luego se realiza un intento incorrecto del pin y luego otro intento correcto del pin para realizar un retiro*/
         #50 rst = 1;
         #10 rst = 0;
+        #10 BALANCE_INICIAL = 64'd10000; // Balance inicial: 10,000
+        //Pin incorrecto #1
+        #20 TARJETA_RECIBIDA = 1;
+        #20 DIGITO = 4'd1; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd1; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd1; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd1; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+
+        // Espera para verificar el PIN incorrecto
+        #30;
+
+        // Simulación de ingreso de PIN correcto
+        #20 DIGITO = 4'd3; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd7; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd6; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        #20 DIGITO = 4'd1; DIGITO_STB = 1;
+        #10 DIGITO_STB = 0;
+        // Espera para verificar el PIN
+        #5;
+        
+        // Simulación de seleccionar retiro (TIPO_TRANS = 1) y monto
+        #10 TIPO_TRANS = 1; MONTO = 32'd2000; MONTO_STB = 1; //Monto 2000
+        #15 MONTO_STB = 0; //Se duplica el tiempo de esta senial
+        // Espera para procesar el deposito
+        #50;
 
         // Fin de la simulación
-        #500 $finish;
+        #100 $finish;
     end
 
 endmodule
