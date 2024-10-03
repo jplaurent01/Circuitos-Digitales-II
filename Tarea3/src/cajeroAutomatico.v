@@ -168,12 +168,16 @@ module cajero_automatico (
                 //Se ingresa pin incorrecto
                 WRONG_PIN:begin
                      // Se actualizan los intentos
-                    PIN_INCORRECTO <= 1;
+                    if (intentos == 0) begin // Si ya falló una vez (el valor anterior a este ciclo era 1)
+                        PIN_INCORRECTO <= 1;    // Activamos la advertencia
+                    end 
                     intentos <= intentos + 1;
                     if (intentos == 1) begin // Si ya falló una vez (el valor anterior a este ciclo era 1)
+                        PIN_INCORRECTO <= 0;
                         ADVERTENCIA <= 1;     // Activamos la advertencia
                     end 
-                    if (intentos >= 2) begin  // Si ya falló tres veces (valor anterior era 2)
+                    if (intentos >= 2) begin // Si ya falló tres veces (valor anterior era 2)
+                        ADVERTENCIA <= 0;   
                         BLOQUEO <= 1;         // Activamos el bloqueo
                     end
                 end
