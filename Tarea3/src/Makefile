@@ -1,4 +1,4 @@
-all: yosys cajeroAutomatico controladorSintetizado 
+all: yosys cajeroAutomatico cajeroAutomaticoSintetizado 
 
 yosys: cajeroAutomatico.ys
 			yosys -s cajeroAutomatico.ys
