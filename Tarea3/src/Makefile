@@ -17,4 +17,4 @@ mostrar_ondas:
 		gtkwave gtkw_cajero.gtkw gtkw_cajero_Sintetizado.gtkw &
 
 clean:		
-			rm .*.out
+			rm *.out
