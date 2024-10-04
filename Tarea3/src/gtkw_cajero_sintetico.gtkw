@@ -1,20 +1,20 @@
 [*]
-[*] GTKWave Analyzer v3.3.71 (w)1999-2016 BSI
-[*] Thu Oct 03 15:58:45 2024
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Fri Oct  4 00:10:48 2024
 [*]
-[dumpfile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea3\src\resultados_cajero_automatico.vcd"
-[dumpfile_mtime] "Thu Oct 03 15:57:18 2024"
-[dumpfile_size] 114468
-[savefile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea3\src\gtkw_cajero_Sintetizado.gtkw"
+[dumpfile] "/home/jose/Documents/Digitales2/Circuitos-Digitales-II/Tarea3/src/resultados_cajero_automatico_sintesis.vcd"
+[dumpfile_mtime] "Fri Oct  4 00:00:06 2024"
+[dumpfile_size] 111251
+[savefile] "/home/jose/Documents/Digitales2/Circuitos-Digitales-II/Tarea3/src/gtkw_cajero_sintetico.gtkw"
 [timestart] 0
-[size] 1366 705
-[pos] -1 -1
-*-8.622506 1666 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[size] 1296 601
+[pos] -101 -1
+*-8.602241 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] cajero_automatico_tb.
-[sst_width] 197
+[sst_width] 233
 [signals_width] 198
 [sst_expanded] 1
-[sst_vpaned_height] 190
+[sst_vpaned_height] 58
 @28
 cajero_automatico_tb.U0.clk
 cajero_automatico_tb.U0.rst
@@ -40,6 +40,7 @@ cajero_automatico_tb.U0.ADVERTENCIA
 cajero_automatico_tb.U0.BLOQUEO
 @22
 cajero_automatico_tb.U0.pin_tecleado[15:0]
+cajero_automatico_tb.U0.state[6:0]
 @29
 cajero_automatico_tb.U0.intentos[1:0]
 [pattern_trace] 1

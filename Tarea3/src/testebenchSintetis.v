@@ -23,7 +23,7 @@ module cajero_automatico_tb;
 
     // Archivo para guardar la simulación
     initial begin
-        $dumpfile("resultados_cajero_automatico.vcd");
+        $dumpfile("resultados_cajero_automatico_sintesis.vcd");
         $dumpvars(-1, U0);
     end
 

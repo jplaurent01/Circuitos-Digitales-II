@@ -11,7 +11,7 @@ cajeroAutomatico: testebench.v
 cajeroAutomaticoSintetizado: testebenchSintetis.v
 			iverilog testebenchSintetis.v -o sintetizado.out
 			vvp sintetizado.out
-			gtkwave gtkw_cajero_Sintetizado.gtkw &
+			gtkwave gtkw_cajero_sintetico.gtkw &
 
 mostrar_ondas:
 		gtkwave gtkw_cajero.gtkw gtkw_cajero_Sintetizado.gtkw &
