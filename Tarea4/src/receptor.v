@@ -29,6 +29,7 @@ module  receptor_transacciones (
     reg ultimo_bit_adr;
     reg flag_comunicacion_receptor;
     reg flag_end_addres;
+    reg se_envio_direcion;
     reg [6:0] get_I2C_ADDR;
     localparam [6:0] EXPECTED_I2C_ADDR = 7'b0111101;
 
@@ -39,6 +40,8 @@ module  receptor_transacciones (
             SDA_IN <= 1;
             flag_comunicacion_receptor <=1;
             flag_end_addres <= 0;
+            se_envio_direcion <= 0;
+
         end else begin
             state_receptor <= next_state_receptor; //Caso actual para a ser el siguiente estado
         end
@@ -50,6 +53,7 @@ module  receptor_transacciones (
         case (state_receptor)
 
             IDLE: begin // Caso inicial maquina estados
+            se_envio_direcion = 0;
             if (SCL && ~SDA_OUT) begin
                 next_state_receptor = INICIO;
             end
@@ -60,11 +64,13 @@ module  receptor_transacciones (
             end
 
             ENVIAR_ACK: begin //Debo hacer ACK para trama datos 16 bits
-                if (contador_adr_receptor == 9 && contador_bits_receptor == 0) begin //Debo compara direcion recibida con el valor del dispositivo
+                if (contador_adr_receptor == 9 &&  se_envio_direcion == 0) begin //Debo compara direcion recibida con el valor del dispositivo
                     //if (get_I2C_ADDR == EXPECTED_I2C_ADDR) begin
                         if (ultimo_bit_adr == 0) begin // Si RNW es 1, es una transacción de lectura
+                            contador_bits_receptor = 0;
                             next_state_receptor = LECTURA;
                         end else if(ultimo_bit_adr == 1) begin // Si RNW es 0, es una transacción de escritura
+                            contador_bits_receptor = 0;
                             next_state_receptor = ESCRITURA;
                         end
                     //end
@@ -72,31 +78,29 @@ module  receptor_transacciones (
 
                 else if (contador_bits_receptor == 16) begin
                     if (ultimo_bit_adr == 0) begin // Si RNW es 1, es una transacción de lectura
+                        contador_bits_receptor = 0;
                         next_state_receptor = LECTURA;
                     end else if(ultimo_bit_adr == 1) begin // Si RNW es 0, es una transacción de escritura
+                        contador_bits_receptor = 0;
                         next_state_receptor = ESCRITURA;
                     end
                 end
             end
     
             LECTURA: begin //Aqui se envian tramas de 16 bits
+                 se_envio_direcion = 1;
                 if (contador_bits_receptor <= 15) begin
                     flag_comunicacion_receptor = 1; // Mientras haya bits que leer, la comunicación sigue
                     next_state_receptor = RECIBIR_ACK;
-                end else if (SCL &&  SDA_IN) begin // Una vez que se ha leído todo, termina la comunicación
-                    flag_comunicacion_receptor = 0;
-                    next_state_receptor = PARADA;
-                end
+                end 
             end
 
             ESCRITURA: begin
+                 se_envio_direcion = 1;
                 if (contador_bits_receptor == 16 ) begin // Mientras haya bits que escribir, la comunicación sigue
                     flag_comunicacion_receptor = 1;
                     next_state_receptor = ENVIAR_ACK;
-                end else if (SCL &&  SDA_IN) begin  // Una vez que se ha escrito todo, termina la comunicación
-                    flag_comunicacion_receptor = 0;
-                    next_state_receptor = PARADA;
-                end
+                end 
             end
 
             PARADA:begin
@@ -151,11 +155,14 @@ module  receptor_transacciones (
 
     always @(posedge SCL) begin
         if (rst_receptor) begin
+
             contador_bits_receptor <= 0;
             contador_adr_receptor <= 0;
             get_I2C_ADDR <= 7'b0; // Inicializar la variable
             ultimo_bit_adr <= 0;
             flag_end_addres <= 0;
+            se_envio_direcion <= 0;
+
         end else begin
             case (state_receptor) // Comportamiento de las salidas ante cambios de estados
 
