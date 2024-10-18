@@ -19,7 +19,9 @@ module generador_transacciones (
     parameter ENVIAR_DIR_RECEPTOR = 1;
     parameter ESCRITURA = 2; // Escritura
     parameter LECTURA = 3; // Lectura
-    parameter PARADA = 4;   //Indicacion de parar 
+    parameter PARADA = 4;   // Indicacion de parar
+    parameter RECIBIR_ACK = 5; // Recibo ack
+    parameter ENVIAR_ACK = 6; // Recibo ack
 
     //Variables intermedias
     reg [2:0] state, next_state; //registros del estado actual y siguiente estado
@@ -27,6 +29,7 @@ module generador_transacciones (
     reg [4:0] contador_adr;//Contador de bits de la direcion del recpetor
     reg flag_comunicacion;//Bandera que indica si se mantiene o no la comunicacion
     reg condicion_scl;//Selector de conmutacion reloj o señal permanece unicamente en alto
+    reg condicion_de_parada;
 
     //Fip flops
     always @(posedge clk) begin
@@ -34,6 +37,7 @@ module generador_transacciones (
             state <= INICIO; //Se establce como estado inicial INICIO
             flag_comunicacion <= 0; //No existe comunicacion
             condicion_scl <= 0; //Reloj permanece en alto inicialmente
+            condicion_de_parada <= 0;
         end else begin
             state <= next_state; //Caso actual para a ser el siguiente estado
         end
@@ -44,7 +48,6 @@ module generador_transacciones (
         next_state = state; // Siguiente estado es el estado actual
         case (state)
             INICIO: begin // Caso inicial maquina estados
-                //if (START_STB && SCL &&  ~SDA_IN) begin //Se inicia comunicacion el generador de transacciones debe producir la  condición de inicio. Es decir, debe bajar la señal SDA mientras el SCL permanece en alto.  Note que esta transición NO ocurre en un flanco del SCL.
                 if (START_STB && SCL) begin //Se inicia comunicacion el generador de transacciones debe producir la  condición de inicio. Es decir, debe bajar la señal SDA mientras el SCL permanece en alto.  Note que esta transición NO ocurre en un flanco del SCL.
                     condicion_scl = 1;//Reloj conmuta
                     next_state = ENVIAR_DIR_RECEPTOR;//Envio direcion del receptor en cada flanco positivo de SCL
@@ -52,57 +55,44 @@ module generador_transacciones (
                 
             end
 
-            /*
-    
-            ENVIAR_DIR_RECEPTOR:begin //Aqui envio 8 bits 7 primeros tienen direcion del recptor y ultimo bit indica si es escritura o lectura
-                
-                if (SDA_IN && START_STB && RNW && contador_adr > 7) begin //SDA en 1 recibo ACK del receptor, indica que se recibieron 8 bits
-                    
-                    next_state = LECTURA;
+            ENVIAR_DIR_RECEPTOR: begin // Envio direcion del receptor
+                if (contador_adr == 9) begin // Si contador_adr es igual a 8 epero un ACK
+                    next_state = RECIBIR_ACK;
                 end
-
-                if (SDA_IN && START_STB && ~RNW && contador_adr > 7) begin //SDA en 1 recibo ACK del receptor, indica que se recibieron 8 bits
-                    
-                    next_state = ESCRITURA;
-                end
-                
             end
-            */
 
-            ENVIAR_DIR_RECEPTOR: begin
-                if (contador_adr > 7) begin // Si contador_adr es mayor a 7
+            RECIBIR_ACK: begin // Recibo ack cuando contador adress == 9 o contador bits == 17
+                contador_bits = 0; // Reinicio el contador de bits de datos
+                if (~SDA_IN) begin
                     if (RNW) begin // Si RNW es 1, es una transacción de lectura
                         next_state = LECTURA;
                     end else begin // Si RNW es 0, es una transacción de escritura
                         next_state = ESCRITURA;
                     end
+                end else begin
+                    flag_comunicacion = 0;
+                    next_state = PARADA;
                 end
             end
             
             LECTURA: begin // Aqui se envian tramas de 16 bits
-                if (contador_bits < 15 && SDA_IN) begin
+                if (contador_bits == 16 ) begin
                     flag_comunicacion = 1; // Mientras haya bits que leer, la comunicación sigue
-                end else begin // Una vez que se ha leído todo, termina la comunicación
-                    flag_comunicacion = 0; // Se termino comunicacion
-                    next_state = PARADA; //Proximo estado es el de PARADA
+                    next_state = ENVIAR_ACK;
                 end
             end
 
             ESCRITURA: begin
-                if (contador_bits < 15  && SDA_IN) begin // Mientras haya bits que escribir, la comunicación sigue
+                if (contador_bits == 16) begin // Mientras haya bits que escribir, la comunicación sigue
                     flag_comunicacion = 1; // Continua la comunicacion
-                end else begin  // Una vez que se ha escrito todo, termina la comunicación
-                    flag_comunicacion = 0; // Termina la comunicacion
-                    next_state = PARADA; //Proximi estado es PARADA
+                    next_state = RECIBIR_ACK;
                 end
             end
 
             PARADA:begin
-                if (SCL &&  SDA_IN) begin //Una vez que se completa toda la transacción, el generador de transacciones debe enviar una condición de parada (P), que consiste en poner en alto la señal de SDA mientras el SCL también se encuentra en alto
-                    flag_comunicacion = 0; // Se termina la comunicacion
-                    condicion_scl = 0; //Reloj permanece en alto
-                    next_state = INICIO; //Porximo estado INICIO
-                end
+                condicion_scl = 0;
+                next_state = INICIO; //Porximo estado INICIO
+
             end
             
         endcase
@@ -123,28 +113,30 @@ module generador_transacciones (
         contador_adr <= 0; // Contador bits de la direcion del receptor en 0
         clk_div2    <= 0; // Cuando rst está activo, se reinicia clk_div2 y el contador a 0.
         count_clock <= 0; // Contador del divisor de frecuencia en cero
+        SDA_OUT <= 1;
     end else begin
         clk_div2    <= ~clk_div2; // Invertir clk_div2 en cada flanco positivo del reloj para dividir su frecuencia.
         count_clock <= count_clock+1; // Incrementar el contador de reloj.
 
         case (state)
             INICIO: begin // Caso inicial maquina estados
-                SDA_OUT <= 0;
+                SDA_OUT <= 0; //Pongo SDA_OUT en bajo
             end
 
             ENVIAR_DIR_RECEPTOR: begin
-        
+            end
+
+            RECIBIR_ACK: begin
             end
             
-            LECTURA: begin // Aqui se envian tramas de 16 bits
-                
+            LECTURA: begin  
             end
 
             ESCRITURA: begin 
             end
 
             PARADA:begin
-                SDA_OUT <= 1;
+                SDA_OUT <= 1; //Actualizo SDA_OUT en alto
             end
             
         endcase
@@ -154,18 +146,15 @@ module generador_transacciones (
 
     assign clk_div4 = count_clock[1]; // La señal `clk_div4` se genera tomando el segundo bit del contador, dividiendo así la frecuencia del reloj por 4.
     assign SCL = condicion_scl ? count_clock[1] : 1'b1; // Seleciono si reloj conmuta o permanece en alto.
-    // Incremento de cuenta_bits
-    // Este bloque de código se activa en cada flanco positivo de SCL, la señal de reloj del bus I2C.
-    // El código inicializa o reinicia ciertos registros cuando `rst` o `start_stb` están activos,
-    // y en caso contrario, actualiza los registros relacionados con el contador de bits (cuenta_bits) y las señales SDA_OE y SDA_OUT.
-   always @(posedge SCL) begin
-    if (rst || START_STB) begin
+
+   always @(posedge SCL) begin //Cada vez que se da un flanco positivo del reloj SCL hago algo
+    if (rst || START_STB) begin // Caso de un reset
         contador_bits <= 0;
         contador_adr <= 0;
+        condicion_de_parada <= 0;
     end else begin
         case (state) // Comportamiento de las salidas ante cambios de estados
-            INICIO: begin // Caso inicial
-                
+            INICIO: begin 
             end
 
             ENVIAR_DIR_RECEPTOR: begin // Envio de datos
@@ -182,6 +171,15 @@ module generador_transacciones (
                 
             end
 
+            RECIBIR_ACK: begin
+                SDA_OE <= 0; // No tengo control bus
+                if (~SDA_IN) begin // Si SDA_IN en bajo actualizo SDA_OUT
+                    SDA_OUT <= 0;
+                end else begin
+                    SDA_OUT <= 1;
+                end
+            end
+            
             LECTURA: begin // Lectura
                 if (contador_bits <= 15) begin //Cuando leo 15 o menos bits
                     // Desplaza los bits de RD_DATA a la izquierda e inserta el nuevo bit desde SDA_IN
