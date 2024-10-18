@@ -115,7 +115,7 @@ module  receptor_transacciones (
     
             LECTURA: begin //Aqui se envian tramas de 16 bits
                  se_envio_direcion = 1;
-                if (contador_bits_receptor <= 15) begin
+                if (contador_bits_receptor == 16) begin
                     flag_comunicacion_receptor = 1; // Mientras haya bits que leer, la comunicación sigue
                     next_state_receptor = RECIBIR_ACK;
                 end 
@@ -130,18 +130,14 @@ module  receptor_transacciones (
             end
 
             PARADA:begin
-                
                 next_state_receptor = IDLE;
-
             end
            
-            
         endcase
     end
 
     always @(posedge SCL) begin
-        if (rst_receptor) begin
-            //Inicio variables internas
+        if (rst_receptor) begin // Inicio variables internas
             contador_bits_receptor <= 0;
             contador_adr_receptor <= 0;
             get_I2C_ADDR <= 7'b0; 
@@ -182,15 +178,12 @@ module  receptor_transacciones (
                         end
                 end
 
-            
                 LECTURA: begin
-                    if (contador_bits_receptor <= 15) begin
-                        // Desplaza los bits de RD_DATA a la izquierda e inserta el nuevo bit desde SDA_IN
-                        SDA_IN <= {RD_DATA_receptor[14:0], SDA_OUT};
-                        
+                    if (contador_bits_receptor <= 15) begin // Si contador_bits es menor o igual a 15
+                        SDA_IN <= RD_DATA_receptor[15 - contador_bits_receptor]; // Enviar el bit correspondiente de WR_DATA
                     end
                     contador_bits_receptor <= contador_bits_receptor + 1; // Incrementar el contador de bits
-                    
+                
                 end
 
                 ESCRITURA: begin
@@ -203,8 +196,7 @@ module  receptor_transacciones (
                 end
 
                 PARADA: begin
-                    // Lógica para manejar el estado de PARADA
-                    
+                    // Lógica para manejar el estado de PARADA       
                 end
             endcase
         end
