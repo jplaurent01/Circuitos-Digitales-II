@@ -48,7 +48,7 @@ module comunicacion_tb;
         // Simular una transacción de escritura
         #50 START_STB = 1; RNW = 0; // Iniciar escritura
         // Enviar cada bit de I2C_ADDR a SDA_IN
-        #50 START_STB = 0; // Finalizar la señal START_STB
+        #20 START_STB = 0; // Finalizar la señal START_STB
         
         // Simular una transacción de lectura
         //#100 START_STB = 1; RNW = 1; // Iniciar lectura

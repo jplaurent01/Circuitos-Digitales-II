@@ -14,7 +14,7 @@ module  receptor_transacciones (
 );
 
     //Definicion de los estados del cajero automatico
-    parameter IDLE = 0; 
+    parameter IDLE = 0;            // Estado antes de inicio
     parameter INICIO = 1;         //Estado inicial
     parameter LECTURA = 2;       // Espera de tarjeta
     parameter ESCRITURA = 3;     // Lectura de pin
@@ -23,27 +23,53 @@ module  receptor_transacciones (
     parameter ENVIAR_ACK = 6; // Recibo ack
 
     //Variales internas
-    reg [2:0] state_receptor, next_state_receptor; //registros del estado actual y siguiente estado
-    reg [4:0] contador_bits_receptor;
-    reg [4:0] contador_adr_receptor;
-    reg ultimo_bit_adr;
-    reg flag_comunicacion_receptor;
-    reg flag_end_addres;
-    reg se_envio_direcion;
-    reg [6:0] get_I2C_ADDR;
-    localparam [6:0] EXPECTED_I2C_ADDR = 7'b0111101;
+    reg [2:0] state_receptor, next_state_receptor; // registros del estado actual y siguiente estado
+    reg [4:0] contador_bits_receptor; // Contador de bits del receptor
+    reg [4:0] contador_adr_receptor; // Contador de bits del adress
+    reg ultimo_bit_adr; // Contiene el octavo bit indica si es lectura o escritura
+    reg flag_comunicacion_receptor; // Evalua si hay comunicacion en el receptor
+    reg flag_end_addres; // Bandera de que se termino de enviar direccion
+    reg se_envio_direcion; // Determina si se envio direccion
+    reg [6:0] get_I2C_ADDR; // Almacena el valor del I2C_ADDR enviada del generador
+    localparam [6:0] EXPECTED_I2C_ADDR = 7'b0111101; // Valor de la direccion del generador
 
     //Transición de estados
     always @(posedge clk_receptor) begin
         if (rst_receptor) begin //Caso inicial y de reinicio, se establecen condiciones iniciales
             state_receptor <= IDLE; //Se establce como estado inicial IDLE
-            SDA_IN <= 1;
-            flag_comunicacion_receptor <=1;
-            flag_end_addres <= 0;
-            se_envio_direcion <= 0;
+            SDA_IN <= 1; // SDA_IN inidiacilzada en alto 
+            flag_comunicacion_receptor <=1; // Comunicacion con generador en alto
+            flag_end_addres <= 0; // Bandera de que se termino de enviar la direcion
+            se_envio_direcion <= 0; // Se determina si se envio direcion
 
         end else begin
             state_receptor <= next_state_receptor; //Caso actual para a ser el siguiente estado
+             case (state_receptor)
+
+                IDLE: begin // Caso inicial maquina estados
+                    SDA_IN <= 0;
+                end
+
+                INICIO: begin // Caso inicial maquina estados
+                end
+
+                ENVIAR_ACK: begin 
+                    if (contador_adr_receptor == 9 ) begin
+                        flag_end_addres <= 1; //Se termino de enviar direccion si contador_adr_receptor == 9 
+                    end
+                end
+        
+                LECTURA: begin //Aqui se envian tramas de 16 bits  
+                end
+
+                ESCRITURA: begin   
+                end
+
+                PARADA:begin
+                    SDA_IN <= 1; // Se  actualiza SDA_IN en alto luego de que SCL este en alto.
+                end
+                
+            endcase
         end
     end
     
@@ -53,10 +79,10 @@ module  receptor_transacciones (
         case (state_receptor)
 
             IDLE: begin // Caso inicial maquina estados
-            se_envio_direcion = 0;
-            if (SCL && ~SDA_OUT) begin
-                next_state_receptor = INICIO;
-            end
+                se_envio_direcion = 0;
+                if (SCL && ~SDA_OUT) begin // Caso de SCL en alto y sda_out bajo
+                    next_state_receptor = INICIO;
+                end
             end
 
             INICIO: begin // Caso inicial maquina estados
@@ -65,12 +91,12 @@ module  receptor_transacciones (
 
             ENVIAR_ACK: begin //Debo hacer ACK para trama datos 16 bits
                 if (contador_adr_receptor == 9 &&  se_envio_direcion == 0) begin //Debo compara direcion recibida con el valor del dispositivo
-                    //if (get_I2C_ADDR == EXPECTED_I2C_ADDR) begin
+                    //if (get_I2C_ADDR == EXPECTED_I2C_ADDR) begin //TENGO PROBLEMA VERIFICAR LA DIRECION OBTENIDA
                         if (ultimo_bit_adr == 0) begin // Si RNW es 1, es una transacción de lectura
-                            contador_bits_receptor = 0;
+                            contador_bits_receptor = 0; // Re inicio contadro bits del receptor
                             next_state_receptor = LECTURA;
                         end else if(ultimo_bit_adr == 1) begin // Si RNW es 0, es una transacción de escritura
-                            contador_bits_receptor = 0;
+                            contador_bits_receptor = 0; // Re inicio contadro bits del receptor
                             next_state_receptor = ESCRITURA;
                         end
                     //end
@@ -78,10 +104,10 @@ module  receptor_transacciones (
 
                 else if (contador_bits_receptor == 16) begin
                     if (ultimo_bit_adr == 0) begin // Si RNW es 1, es una transacción de lectura
-                        contador_bits_receptor = 0;
+                        contador_bits_receptor = 0; // Re inicio contadro bits del receptor
                         next_state_receptor = LECTURA;
                     end else if(ultimo_bit_adr == 1) begin // Si RNW es 0, es una transacción de escritura
-                        contador_bits_receptor = 0;
+                        contador_bits_receptor = 0; // Re inicio contadro bits del receptor
                         next_state_receptor = ESCRITURA;
                     end
                 end
@@ -113,52 +139,12 @@ module  receptor_transacciones (
         endcase
     end
 
-        // Máquina de estados
-    always @(posedge clk_receptor) begin
-        if (rst_receptor) begin
-            state_receptor <= IDLE; //Se establce como estado inicial IDLE
-            SDA_IN <= 1;
-            flag_comunicacion_receptor <=1;
-        end else begin
-            case (state_receptor)
-
-                IDLE: begin // Caso inicial maquina estados
-                    SDA_IN <= 0;
-                end
-
-                INICIO: begin // Caso inicial maquina estados
-                   
-                end
-
-                ENVIAR_ACK: begin
-                    if (contador_adr_receptor == 9 ) begin
-                        flag_end_addres <= 1;
-                    end
-                end
-        
-                LECTURA: begin //Aqui se envian tramas de 16 bits
-                     
-                end
-
-                ESCRITURA: begin
-                     
-                end
-
-                PARADA:begin
-                    SDA_IN <= 1;
-                end
-                
-            endcase
-        end
-    end
-
-
     always @(posedge SCL) begin
         if (rst_receptor) begin
-
+            //Inicio variables internas
             contador_bits_receptor <= 0;
             contador_adr_receptor <= 0;
-            get_I2C_ADDR <= 7'b0; // Inicializar la variable
+            get_I2C_ADDR <= 7'b0; 
             ultimo_bit_adr <= 0;
             flag_end_addres <= 0;
             se_envio_direcion <= 0;
@@ -171,7 +157,6 @@ module  receptor_transacciones (
                 end
 
                 INICIO: begin // Caso inicial
-                    
                 end
 
                 ENVIAR_ACK: begin
