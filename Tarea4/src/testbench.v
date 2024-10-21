@@ -39,7 +39,7 @@ module comunicacion_tb;
         RNW = 0;
         I2C_ADDR = 7'b0111101; // Dirección I2C, 61
         WR_DATA_INPUT = 16'h1234;
-        RD_DATA_INPUT = 16'h1111;
+        RD_DATA_INPUT = 16'h5678;
 
         // Esperar para desactivar el reset
         #25 rst = 1;
@@ -61,7 +61,7 @@ module comunicacion_tb;
         //#25 rst = 1; // Reiniciar para finalizar
 
         // Terminar la simulación
-        #2500 $finish;
+        #2200 $finish;
     end
 
     // Instancia del módulo generador de transacciones I2C
