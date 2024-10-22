@@ -42,15 +42,15 @@ module  receptor_transacciones (
             flag_comunicacion_receptor <=1; // Comunicacion con generador en alto
             flag_end_addres <= 0; // Bandera de que se termino de enviar la direcion
             se_envio_direcion <= 0; // Se determina si se envio direcion
-            contador_WR_DATA_receptor <= 0;
-            contador_RD_DATA_receptor <= 0;
+            contador_WR_DATA_receptor <= 0; // Contador WR_DATA
+            contador_RD_DATA_receptor <= 0;  // Contador RD_DATA
         end else begin
             state_receptor <= next_state_receptor; //Caso actual para a ser el siguiente estado
              case (state_receptor)
 
                 IDLE: begin // Caso inicial maquina estados
-                    SDA_IN <= SDA_OUT;
-                    flag_end_addres <= 0; 
+                    SDA_IN <= SDA_OUT; // SDA transmite contenido de SDA_OUT
+                    flag_end_addres <= 0; // Todavia no se han recibido bits de dirrecion de receptor
                 end
 
                 ENVIAR_ACK: begin 
@@ -60,10 +60,8 @@ module  receptor_transacciones (
                 end
 
                 PARADA:begin
-                    SDA_IN <= 1; // Se  actualiza SDA_IN en alto luego de que SCL este en alto.
-                    contador_bits_receptor <= 0;
-                    contador_adr_receptor <= 0;
-                    contador_WR_DATA_receptor <= 0;
+                    // Se  actualiza SDA_IN en alto luego de que SCL este en alto y  se reinician contadores
+                    SDA_IN <= 1; contador_bits_receptor <= 0; contador_adr_receptor <= 0; contador_WR_DATA_receptor <= 0;
                 end
                 
             endcase
@@ -78,38 +76,38 @@ module  receptor_transacciones (
             IDLE: begin // Caso inicial maquina estados
                 se_envio_direcion = 0;
                 if (SCL && ~SDA_OUT) begin // Caso de SCL en alto y sda_out bajo
-                    get_I2C_ADDR = 7'b0;
-                    next_state_receptor = INICIO;
+                    get_I2C_ADDR = 7'b0; // Reinicio receptor de direcion del receptor
+                    next_state_receptor = INICIO; // Muevo al estado inicial
                 end
             end
 
-            INICIO: begin // Caso inicial maquina estados
-                next_state_receptor = ENVIAR_ACK;
+            INICIO: begin // Caso inicial 
+                next_state_receptor = ENVIAR_ACK; // Muevo a estado ENVIAR_ACK
             end
 
-            ENVIAR_ACK: begin //Debo hacer ACK para trama datos 16 bits
+            ENVIAR_ACK: begin //Debo hacer ACK para trama datos 9 bits
                 if (contador_adr_receptor == 9 &&  se_envio_direcion == 0) begin //Debo compara direcion recibida con el valor del dispositivo
-                    if (get_I2C_ADDR == EXPECTED_I2C_ADDR) begin //TENGO PROBLEMA VERIFICAR LA DIRECION OBTENIDA
+                    if (get_I2C_ADDR == EXPECTED_I2C_ADDR) begin // Verifico direccion obtenida con registro
                         if (ultimo_bit_adr == 0) begin // Si RNW es 1, es una transacción de lectura
                             contador_bits_receptor = 0; // Re inicio contadro bits del receptor
-                            next_state_receptor = ESCRITURA;
+                            next_state_receptor = ESCRITURA; // Me muevo estado ESCRITURA
                         end else if(ultimo_bit_adr == 1) begin // Si RNW es 0, es una transacción de escritura
                             contador_bits_receptor = 0; // Re inicio contadro bits del receptor
-                            next_state_receptor = LECTURA;
+                            next_state_receptor = LECTURA; // Me muevo estado de LECTURA
                         end
                     end
                 end
 
-                else if (contador_bits_receptor == 9) begin
+                else if (contador_bits_receptor == 9) begin // Si contador de bits es 9 
                     if (ultimo_bit_adr == 0) begin // Si RNW es 1, es una transacción de lectura
                         contador_bits_receptor = 0; // Re inicio contadro bits del receptor
-                        next_state_receptor = ESCRITURA;
+                        next_state_receptor = ESCRITURA; // Me muevo estado Escritura
                     end else if(ultimo_bit_adr == 1) begin // Si RNW es 0, es una transacción de escritura
                         contador_bits_receptor = 0; // Re inicio contadro bits del receptor
-                        next_state_receptor = LECTURA;
+                        next_state_receptor = LECTURA; // Me muevo estado Lectura
                     end
-                end else if (contador_WR_DATA_receptor == 17) begin
-                    next_state_receptor = PARADA;
+                end else if (contador_WR_DATA_receptor == 17) begin // Si termine de recibir todos los datos de WR_DATA
+                    next_state_receptor = PARADA; // Me muevo estado de Parada
                 end
             end
 
@@ -120,32 +118,32 @@ module  receptor_transacciones (
                     next_state_receptor = PARADA; // Voy a condicion de parada
                 end else  if (~SDA_OUT) begin //Si recibo un ACK
                     if (ultimo_bit_adr) begin // Si RNW es 1, es una transacción de lectura
-                        next_state_receptor = LECTURA;
+                        next_state_receptor = LECTURA; // Me muevo estado Lectura
                     end else begin // Si RNW es 0, es una transacción de escritura
-                        next_state_receptor = ESCRITURA;
+                        next_state_receptor = ESCRITURA; // Me muevo estado de Escritura
                     end
                 end 
             end
     
-            LECTURA: begin //Aqui se envian tramas de 16 bits
-                 se_envio_direcion = 1;
-                if (contador_bits_receptor == 9 || contador_RD_DATA_receptor == 17) begin
+            LECTURA: begin //Aqui se envian tramas de 9 bits
+                 se_envio_direcion = 1; // Termino de enviar direccion 
+                if (contador_bits_receptor == 9 || contador_RD_DATA_receptor == 17) begin // Si contador bits es 9 o contador RD es 17 
                     flag_comunicacion_receptor = 1; // Mientras haya bits que leer, la comunicación sigue
-                    next_state_receptor = RECIBIR_ACK;
+                    next_state_receptor = RECIBIR_ACK; // Me muevo a recibir un ACK
                 end 
             end
 
             ESCRITURA: begin
-                 se_envio_direcion = 1;
+                 se_envio_direcion = 1; // Se envio direccion del receptor
                 if (contador_bits_receptor == 9 || contador_WR_DATA_receptor == 17 ) begin // Mientras haya bits que escribir, la comunicación sigue
-                    flag_comunicacion_receptor = 1;
-                    next_state_receptor = ENVIAR_ACK;
+                    flag_comunicacion_receptor = 1; // Mientras haya bits que leer, la comunicación sigue
+                    next_state_receptor = ENVIAR_ACK; // Me muevo a recibir un ACK
                 end 
             end
 
             PARADA:begin
-                if (~SDA_OUT) begin
-                    next_state_receptor = IDLE;
+                if (~SDA_OUT) begin // Si SDA_OUT cambia a bajo, si no continuo en SDA_IN
+                    next_state_receptor = IDLE; // Me muevo a estado  IDLE
                 end
             end
            
@@ -159,8 +157,8 @@ module  receptor_transacciones (
         end else begin
             case (state_receptor) // Comportamiento de las salidas ante cambios de estados
 
-                IDLE: begin // Caso inicial maquina estados
-                    SDA_IN <= 0;
+                IDLE: begin 
+                    SDA_IN <= 0;// SDA_IN en bajo
                 end
 
 
@@ -200,18 +198,18 @@ module  receptor_transacciones (
 
                 RECIBIR_ACK: begin
                     if (~SDA_OUT) begin // Si SDA_IN en bajo actualizo SDA_OUT
-                        SDA_IN <= 0;
+                        SDA_IN <= 0; // SDA_IN bajo
                     end else begin
-                        SDA_IN <= 1;
+                        SDA_IN <= 1; // SDA_IN alto
                     end 
                 end
 
                 ESCRITURA: begin
                     // Durante la escritura, envía los bits de WR_DATA por SDA_OUT uno a uno
-                    if (contador_bits_receptor <= 8) begin
+                    if (contador_bits_receptor <= 8) begin // cuando contador bits es menor igual a 8
                         SDA_IN <= SDA_OUT; // Enviar el bit correspondiente de WR_DATA
-                        WR_DATA_receptor <= {WR_DATA_receptor[16:0], SDA_OUT};
-                        contador_WR_DATA_receptor <= contador_WR_DATA_receptor + 1;
+                        WR_DATA_receptor <= {WR_DATA_receptor[16:0], SDA_OUT}; // Envio contenido de WR_DATA_receptor por SDA_OUT
+                        contador_WR_DATA_receptor <= contador_WR_DATA_receptor + 1; // Incrementar el contador
                     end
                     contador_bits_receptor <= contador_bits_receptor + 1; // Incrementar el contador de bits
                 end

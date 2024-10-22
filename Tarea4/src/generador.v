@@ -178,9 +178,9 @@ module generador_transacciones (
             RECIBIR_ACK: begin
                 SDA_OE <= 0; // No tengo control bus
                 if (~SDA_IN) begin // Si SDA_IN en bajo actualizo SDA_OUT
-                    SDA_OUT <= 0;
+                    SDA_OUT <= 0; // SDA_OUT en bajo
                 end else begin
-                    SDA_OUT <= 1;
+                    SDA_OUT <= 1; // SDA_OUT en alto
                 end
             end
 
@@ -196,8 +196,8 @@ module generador_transacciones (
                 // Durante la lectura, recibo los bits de RD_DATA por SDA_IN uno a uno
                     if (contador_bits <= 8) begin
                         SDA_OUT <= SDA_IN; // Enviar el bit correspondiente de RD_DATA
-                        RD_DATA <= {RD_DATA[16:0], SDA_IN};
-                        contador_WR_DATA <= contador_WR_DATA + 1;
+                        RD_DATA <= {RD_DATA[16:0], SDA_IN}; // Recibo contenido de SDA_IN y lo almaceno en RD_DATA
+                        contador_WR_DATA <= contador_WR_DATA + 1; // Contador + 1
                     end
                     contador_bits <= contador_bits + 1; // Incrementar el contador de bits
                 
@@ -205,14 +205,14 @@ module generador_transacciones (
 
             ESCRITURA: begin // Durante la escritura, envía los bits de WR_DATA por SDA_OUT uno a uno
                 if (contador_bits <= 8) begin // Si contador_bits es menor o igual a 15
-                    if (contador_WR_DATA <= 15) begin
+                    if (contador_WR_DATA <= 15) begin // Contador de contador_WR_DATA menor o igual a 15
                         SDA_OUT <= WR_DATA[15 - contador_WR_DATA]; // Enviar el bit correspondiente de WR_DATA
                     end
-                    if (contador_WR_DATA == 16) begin
+                    if (contador_WR_DATA == 16) begin // Caso contador_WR_DATA igual 16, envio valor anterior
                         SDA_OUT <= WR_DATA[15 - 15]; // Enviar el bit correspondiente de WR_DATA
                     end
                     SDA_OE <= 1;  // Habilitar la salida SDA
-                    contador_WR_DATA <= contador_WR_DATA + 1;
+                    contador_WR_DATA <= contador_WR_DATA + 1; // Contador + 1
                 end
                 contador_bits <= contador_bits + 1; // Incrementar el contador de bits
             end
