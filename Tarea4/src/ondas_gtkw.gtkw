@@ -1,12 +1,12 @@
 [*]
 [*] GTKWave Analyzer v3.3.71 (w)1999-2016 BSI
-[*] Mon Oct 21 18:27:35 2024
+[*] Fri Oct 25 20:44:13 2024
 [*]
 [dumpfile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea4\src\resultados_generador.vcd"
-[dumpfile_mtime] "Mon Oct 21 18:27:05 2024"
-[dumpfile_size] 14696
+[dumpfile_mtime] "Fri Oct 25 20:43:54 2024"
+[dumpfile_size] 14154
 [savefile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea4\src\ondas_gtkw.gtkw"
-[timestart] 4054
+[timestart] 2011
 [size] 1366 705
 [pos] -1 -1
 *-7.151258 4356 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
@@ -45,9 +45,9 @@ comunicacion_tb.U1.SCL
 comunicacion_tb.U1.SDA_OUT
 comunicacion_tb.U1.SDA_OE
 comunicacion_tb.U1.SDA_IN
-@22
-comunicacion_tb.U1.WR_DATA_receptor[15:0]
 @23
+comunicacion_tb.U1.WR_DATA_receptor[15:0]
+@22
 comunicacion_tb.U1.RD_DATA_receptor[15:0]
 @24
 comunicacion_tb.U1.state_receptor[2:0]
