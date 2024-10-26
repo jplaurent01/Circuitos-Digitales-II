@@ -107,6 +107,7 @@ module generador_transacciones (
 
             ENVIAR_DIR_RECEPTOR: begin // Envio direcion del receptor
                 if (contador_adr == 9) begin // Si contador_adr es igual a 9 epero un ACK
+                    SDA_OE <= 0; SDA_OUT <= 0; // Receptor tiene controlo del bus SDA
                     next_state = RECIBIR_ACK; 
                 end
             end

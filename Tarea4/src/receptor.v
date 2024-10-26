@@ -100,6 +100,8 @@ module  receptor_transacciones (
                             contador_bits_receptor = 0; // Re inicio contadro bits del receptor
                             next_state_receptor = LECTURA; // Me muevo estado de LECTURA
                         end
+                    end else begin
+                        SDA_IN <= 1; // No envia ACK
                     end
                 end
                 
