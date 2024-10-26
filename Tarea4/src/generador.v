@@ -29,7 +29,7 @@ module generador_transacciones (
     reg [2:0] state, next_state; // Registros del estado actual y siguiente estado
     reg [4:0] contador_bits; // Contador de bits para proceso de lectura o escritura
     reg [4:0] contador_adr;// Contador de bits de la direcion del recepetor
-    reg [4:0] contador_WR_DATA; // Contador de bits de WR_DATA 
+    reg [4:0] contador_DATA; // Contador de bits de WR_DATA 
     reg [4:0] contador_RD_DATA; // Contador de bits de RD_DATA 
     reg flag_comunicacion;// Bandera que indica si se mantiene o no la comunicacion
     reg flag_end_addres; // Bandera de que se termino de enviar direccion
@@ -51,7 +51,7 @@ module generador_transacciones (
             contador_adr <= 0; // Contador bits de la direcion del receptor en 0
             clk_div2    <= 0; // Cuando rst está activo, se reinicia clk_div2 y el contador a 0.
             count_clock <= 0; // Contador del divisor de frecuencia en cero
-            contador_WR_DATA <= 0; // Contador de WR_data en cero
+            contador_DATA <= 0; // Contador de WR_data en cero
             SDA_OE <= 1; // SDA_OE en alto
             SDA_OUT <= 1; // SDA_OE en alto
 
@@ -68,28 +68,22 @@ module generador_transacciones (
 
                 ENVIAR_ACK: begin 
                     if (contador_adr == 9 ) begin
-                        SDA_OE <= 1;
                         flag_end_addres <= 1; //Se termino de enviar direccion si contador_adr_receptor == 9 
                     end
                 end
 
                 RECIBIR_ACK: begin
-                    //SDA_OE <= 0;
-                    //SDA_OUT <= 0;
                 end
                 
                 LECTURA: begin
-                    SDA_OE <= 0;
-                    SDA_OUT <= 0;
                 end
 
                 ESCRITURA: begin
-                //    SDA_OE <= 1;
                 end
                 
                 PARADA:begin
                 //Actualizo SDA_OE y SDA_OUT en alto, Contador bits en 0, Contador bits de la direcion del receptor en 0
-                 contador_bits <= 0; contador_adr <= 0; contador_WR_DATA <= 0; contador_RD_DATA <= 0;
+                 contador_bits <= 0; contador_adr <= 0; contador_DATA <= 0; contador_RD_DATA <= 0;
                 end
                 
             endcase
@@ -120,7 +114,7 @@ module generador_transacciones (
             RECIBIR_ACK: begin // Recibo ack cuando contador adress == 9 o contador bits == 9
                 contador_bits = 0; // Reinicio el contador de bits de datos
                 SDA_OE <= 0; SDA_OUT <= 0; // Receptor tiene controlo del bus SDA
-                if (contador_WR_DATA == 18) begin //Si ACK en alto voy a Parada
+                if (contador_DATA == 18) begin //Si ACK en alto voy a Parada
                     flag_comunicacion = 0; //Termino comunicacion
                     next_state = PARADA; // Voy a condicion de parada
                 end else  if (~SDA_IN) begin //Si recibo un ACK
@@ -133,7 +127,8 @@ module generador_transacciones (
             end
 
             ENVIAR_ACK: begin
-                if (contador_WR_DATA == 17) begin
+                SDA_OE <= 1; SDA_OUT <= 0; // Receptor tiene controlo del bus SDA
+                if (contador_DATA == 18) begin
                     next_state = PARADA;
                 end else if (contador_bits == 9) begin
                     if (~RNW) begin // Si RNW es 0, es una transacción de ESCRITURA
@@ -147,7 +142,8 @@ module generador_transacciones (
             end
             
             LECTURA: begin // Aqui se envian tramas de 16 bits
-                if (contador_bits == 9 || contador_WR_DATA == 17 ) begin // Mientras haya bits que escribir, la comunicación sigue
+                SDA_OE <= 0;  SDA_OUT <= 0;
+                if (contador_bits == 9 || contador_DATA == 18 ) begin // Mientras haya bits que escribir, la comunicación sigue
                     flag_comunicacion = 1;
                     next_state = ENVIAR_ACK;
                 end 
@@ -155,7 +151,7 @@ module generador_transacciones (
 
             ESCRITURA: begin
                 SDA_OE <= 1;
-                if (contador_bits == 9 || contador_WR_DATA == 18) begin // Mientras haya bits que escribir, la comunicación sigue
+                if (contador_bits == 9 || contador_DATA == 18) begin // Mientras haya bits que escribir, la comunicación sigue
                     flag_comunicacion = 1; // Continua la comunicacion
                     next_state = RECIBIR_ACK; // Verifico si recibo un ACK
                 end
@@ -178,7 +174,7 @@ module generador_transacciones (
 
    always @(posedge SCL) begin //Cada vez que se da un flanco positivo del reloj SCL hago algo
     if (~rst || START_STB) begin // Caso de un reset, reinicion contadores y condicion parada
-        contador_bits <= 0; contador_adr <= 0; contador_WR_DATA <= 0; condicion_de_parada <= 0; flag_end_addres <= 0;
+        contador_bits <= 0; contador_adr <= 0; contador_DATA <= 0; condicion_de_parada <= 0; flag_end_addres <= 0;
     end else begin
         case (state) // Comportamiento de las salidas ante cambios de estados
             INICIO: begin 
@@ -209,8 +205,7 @@ module generador_transacciones (
 
             ENVIAR_ACK: begin
                 if (flag_end_addres) begin // Si ya termine de leer los bit de la direccion
-                    if (contador_bits == 9 || contador_WR_DATA == 16) begin
-                        SDA_OUT <= 0; // Enviar ACK
+                    if (contador_bits == 9 || contador_DATA == 16) begin
                     end
                 end
             end
@@ -218,9 +213,11 @@ module generador_transacciones (
             LECTURA: begin // Lectura
                 // Durante la lectura, recibo los bits de RD_DATA por SDA_IN uno a uno
                     if (contador_bits <= 8) begin
-                        SDA_OUT <= SDA_IN; // Enviar el bit correspondiente de RD_DATA
-                        RD_DATA <= {RD_DATA[16:0], SDA_IN}; // Recibo contenido de SDA_IN y lo almaceno en RD_DATA
-                        contador_WR_DATA <= contador_WR_DATA + 1; // Contador + 1
+                        //SDA_OUT <= SDA_IN; // Enviar el bit correspondiente de RD_DATA
+                        if (contador_DATA < 17) begin
+                            RD_DATA <= {RD_DATA[16:0], SDA_IN}; // Recibo contenido de SDA_IN y lo almaceno en RD_DATA
+                        end
+                        contador_DATA <= contador_DATA + 1; // Contador + 1
                     end
                     contador_bits <= contador_bits + 1; // Incrementar el contador de bits
                 
@@ -228,13 +225,13 @@ module generador_transacciones (
 
             ESCRITURA: begin // Durante la escritura, envía los bits de WR_DATA por SDA_OUT uno a uno
                 if (contador_bits <= 8) begin // Si contador_bits es menor o igual a 15
-                    if (contador_WR_DATA <= 15) begin // Contador de contador_WR_DATA menor o igual a 15
-                        SDA_OUT <= WR_DATA[15 - contador_WR_DATA]; // Enviar el bit correspondiente de WR_DATA
+                    if (contador_DATA <= 15) begin // Contador de contador_DATA menor o igual a 15
+                        SDA_OUT <= WR_DATA[15 - contador_DATA]; // Enviar el bit correspondiente de WR_DATA
                     end
-                    if (contador_WR_DATA >= 16) begin // Caso contador_WR_DATA igual 16, envio valor anterior
+                    if (contador_DATA >= 16) begin // Caso contador_DATA igual 16, envio valor anterior
                         SDA_OUT <= WR_DATA[15 - 15]; // Enviar el bit correspondiente de WR_DATA
                     end
-                    contador_WR_DATA <= contador_WR_DATA + 1; // Contador + 1
+                    contador_DATA <= contador_DATA + 1; // Contador + 1
                 end
                 contador_bits <= contador_bits + 1; // Incrementar el contador de bits
             end

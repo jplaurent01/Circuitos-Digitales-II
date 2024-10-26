@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.71 (w)1999-2016 BSI
-[*] Fri Oct 25 20:44:13 2024
+[*] Sat Oct 26 00:31:52 2024
 [*]
 [dumpfile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea4\src\resultados_generador.vcd"
-[dumpfile_mtime] "Fri Oct 25 20:43:54 2024"
-[dumpfile_size] 14154
+[dumpfile_mtime] "Sat Oct 26 00:28:15 2024"
+[dumpfile_size] 14073
 [savefile] "C:\Users\Administrador\Documents\Circuitos Digitales 2\Circuitos-Digitales-II\Tarea4\src\ondas_gtkw.gtkw"
-[timestart] 2011
+[timestart] 1145
 [size] 1366 705
 [pos] -1 -1
-*-7.151258 4356 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-8.058468 2275 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] comunicacion_tb.
 [sst_width] 197
 [signals_width] 270
@@ -34,27 +34,19 @@ comunicacion_tb.U0.RD_DATA[15:0]
 comunicacion_tb.U0.state[2:0]
 comunicacion_tb.U0.contador_adr[4:0]
 comunicacion_tb.U0.contador_bits[4:0]
-comunicacion_tb.U0.contador_WR_DATA[4:0]
-@28
-comunicacion_tb.U1.clk_receptor
-comunicacion_tb.U1.rst_receptor
-@24
+comunicacion_tb.U1.get_I2C_ADDR[6:0]
 comunicacion_tb.U1.I2C_ADDR_receptor[6:0]
 @28
 comunicacion_tb.U1.SCL
 comunicacion_tb.U1.SDA_OUT
 comunicacion_tb.U1.SDA_OE
 comunicacion_tb.U1.SDA_IN
-@23
-comunicacion_tb.U1.WR_DATA_receptor[15:0]
 @22
+comunicacion_tb.U1.WR_DATA_receptor[15:0]
 comunicacion_tb.U1.RD_DATA_receptor[15:0]
 @24
 comunicacion_tb.U1.state_receptor[2:0]
 comunicacion_tb.U1.contador_adr_receptor[4:0]
 comunicacion_tb.U1.contador_bits_receptor[4:0]
-comunicacion_tb.U1.contador_WR_DATA_receptor[4:0]
-@22
-comunicacion_tb.U1.get_I2C_ADDR[6:0]
 [pattern_trace] 1
 [pattern_trace] 0
