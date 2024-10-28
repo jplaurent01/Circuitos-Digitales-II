@@ -27,13 +27,20 @@ module tester_generador(
         // Esperar para desactivar el reset
         #25 rst = 1;
 
-        // Simular una transacción de escritura
+        // Simular una transacción de escritura prueba #1
         #50 START_STB = 1; RNW = 0; // Iniciar escritura
         #20 START_STB = 0; // Finalizar la señal START_STB
 
-        // Simular una transacción de lectura
+        // Simular una transacción de lectura prueba #2
         #2200 START_STB = 1; RNW = 1; // Iniciar lectura
         #20 START_STB = 0;
+
+        // Simular una direccion erronea prueba #3
+        #2400 rst = 0;
+        #20 rst = 1; I2C_ADDR = 7'b1111101; // Dirección I2C, 61
+        #50 START_STB = 1; RNW = 0; // Iniciar escritura
+        #20 START_STB = 0; // Finalizar la señal START_STB
+        
 
         // Terminar la simulación
         #2200 $finish;
