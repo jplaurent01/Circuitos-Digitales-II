@@ -1,0 +1,35 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Thu Nov 28 23:13:06 2024
+[*]
+[dumpfile] "/home/heinerov/Desktop/Circuitos_digitales_II/Proyecto/2S2024_G7/src/waves_synchronizer.vcd"
+[dumpfile_mtime] "Thu Nov 28 23:11:37 2024"
+[dumpfile_size] 3326
+[savefile] "/home/heinerov/Desktop/Circuitos_digitales_II/Proyecto/2S2024_G7/src/synchronizer_waves.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-5.960330 252 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] controller_tb.
+[sst_width] 233
+[signals_width] 174
+[sst_expanded] 1
+[sst_vpaned_height] 159
+@28
+controller_tb.U0.sync_clk
+controller_tb.U0.mr_main_reset
+controller_tb.U0.COMMA
+controller_tb.U0.DATA
+@22
+controller_tb.U0.rx_code_group[9:0]
+@28
+controller_tb.U0.rx_even
+controller_tb.U0.code_sync_status
+controller_tb.U0.VALID
+@24
+controller_tb.U0.good_cgs[1:0]
+controller_tb.U0.state_sync[8:0]
+@23
+controller_tb.U0.SUDI[9:0]
+[pattern_trace] 1
+[pattern_trace] 0

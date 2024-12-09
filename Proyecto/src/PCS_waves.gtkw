@@ -1,0 +1,67 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Sat Nov 30 02:16:41 2024
+[*]
+[dumpfile] "/home/heinerov/Desktop/Circuitos_digitales_II/Proyecto/2S2024_G7/src/PCS_waves.vcd"
+[dumpfile_mtime] "Sat Nov 30 01:38:35 2024"
+[dumpfile_size] 16726
+[savefile] "/home/heinerov/Desktop/Circuitos_digitales_II/Proyecto/2S2024_G7/src/PCS_waves.gtkw"
+[timestart] 0
+[size] 1756 748
+[pos] 154 -16
+*-5.634754 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] controller_tb.
+[treeopen] controller_tb.U0.
+[treeopen] controller_tb.U0.U3.
+[sst_width] 233
+[signals_width] 182
+[sst_expanded] 1
+[sst_vpaned_height] 167
+@200
+--- Transmisor --
+@28
+controller_tb.U0.U0.gtx_clk
+controller_tb.U0.mr_main_reset
+controller_tb.U0.U0.TX_EN
+controller_tb.U0.U0.transmitting
+@22
+controller_tb.U0.U0.TXD[7:0]
+@24
+controller_tb.U0.U0.state_set[6:0]
+controller_tb.U0.U0.state_code[6:0]
+@22
+controller_tb.U0.U0.tx_o_set[7:0]
+controller_tb.U0.U0.tx_code_group[9:0]
+@28
+controller_tb.U0.U0.tx_even
+controller_tb.U0.U0.tx_disparity
+controller_tb.U0.U0.TX_OSET
+@200
+--- Sincronizador --
+@28
+controller_tb.U0.U1.COMMA
+controller_tb.U0.U1.DATA
+controller_tb.U0.U1.VALID
+@24
+controller_tb.U0.U1.state_sync[8:0]
+@22
+controller_tb.U0.U1.rx_code_group[9:0]
+@28
+controller_tb.U0.U1.code_sync_status
+@22
+controller_tb.U0.U1.SUDI[9:0]
+@28
+controller_tb.U0.U1.rx_even
+@200
+--- Receptor --
+@22
+controller_tb.U0.U3.SUDI[9:0]
+@28
+controller_tb.U0.U3.rx_even
+@22
+controller_tb.U0.U3.SUDI_d[9:0]
+controller_tb.U0.U3.RXD[7:0]
+@24
+controller_tb.U0.U3.state[9:0]
+[pattern_trace] 1
+[pattern_trace] 0
